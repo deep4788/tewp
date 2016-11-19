@@ -1,4 +1,4 @@
-# A Very Unique Text Editor
+# Unique Text Editor
 
 Description
 -----------

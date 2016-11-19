@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Unique Text Editor</title>
+
+        <link rel="stylesheet" href="./codemirror-5.20.2/lib/codemirror.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/ambiance.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/xq-light.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/zenburn.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/solarized.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/icecoder.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/monokai.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/twilight.css">
+
+        <link rel="stylesheet" href="./static/css/thirdparty/font-awesome.min.css"/>
+        <link rel="stylesheet" href="./static/css/thirdparty/normalize.css"/>
+        <link rel="stylesheet" href="./static/css/thirdparty/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./static/css/thirdparty/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="./static/css/inhouse/style.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 pull-left">
+                    <button type="button" class="btn-sm btn-default">New</button>
+                    <button type="button" class="btn-sm btn-default">Open</button>
+                    <button type="button" class="btn-sm btn-default">Save</button>
+                </div>
+                <div class="col-md-6 pull-right">
+                    <div class="dropdown">
+                        <button class="btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            Themes
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="themelist" class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">ambiance</a></li>
+                            <li><a href="#">xq-light</a></li>
+                            <li><a href="#">zenburn</a></li>
+                            <li><a href="#">solarized</a></li>
+                            <li><a href="#">icecoder</a></li>
+                            <li><a href="#">monokai</a></li>
+                            <li><a href="#">twilight</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="editor"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 pull-left">
+                    <div class="fileinfo">
+                        <label>Filename: </label><span id="title"></span>
+                        <label>Words: </label><span id="title"></span>
+                    </div>
+                </div>
+                <div class="col-md-6 pull-right">
+                    <div class="info">
+                        <label>Date: </label><span id="title"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>window.$ = window.jQuery = require("./static/js/thirdparty/jquery-3.1.1.min.js");</script>
+        <script src="./static/js/thirdparty/bootstrap.min.js"></script>
+        <script src="./codemirror-5.20.2/lib/codemirror.js"></script>
+        <script src="./codemirror-5.20.2/mode/javascript/javascript.js"></script>
+        <script src="./static/js/inhouse/index.js"></script>
+    </body>
+</html>
