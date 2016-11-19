@@ -1,0 +1,27 @@
+{
+    "name": "uniqueTextEditor",
+    "version": "1.0.0",
+    "description": "A very unique and useful text-editor written using Electron",
+    "author": "Deep Aggarwal <deep.uiuc@gmail.com>",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/deep4788/uniqueTextEditor"
+    },
+    "keywords": [
+        "electron",
+        "node.js",
+        "notes",
+        "text",
+        "editor",
+        "javascript"
+    ],
+    "devDependencies": {
+        "electron": "^1.4.1",
+        "codemirror": "5.20.2"
+    },
+    "license": "MIT"
+}
