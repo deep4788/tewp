@@ -1,5 +1,5 @@
 {
-    "name": "uniqueTextEditor",
+    "name": "Unique Text Editor",
     "version": "1.0.0",
     "description": "A very unique and useful text-editor written using Electron",
     "author": "Deep Aggarwal <deep.uiuc@gmail.com>",

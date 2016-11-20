@@ -3,6 +3,7 @@
 const electron = require('electron');
 const app = electron.app;  //Module to control application life
 const BrowserWindow = electron.BrowserWindow;  //Module to create native browser window
+//const Tray = electron.Tray;  //Module to add icons and context menus to the system's notification area TODO
 const path = require('path');
 const url = require('url');
 
@@ -11,8 +12,17 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
+    //const appIcon = new Tray('./icon256.png') TODO add app icon
+
     //Create the browser window
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        resizable: false,
+        maximizable: false,
+        title: "Unique Text Editor",
+        backgroundColor: "#3b3a36"
+    });
 
     //Load the index.html of the app
     mainWindow.loadURL(url.format({

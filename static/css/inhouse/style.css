@@ -6,6 +6,10 @@
     padding: 0px;
 }
 
+.CodeMirror {
+    height: 521px;
+}
+
 .dropdown-menu {
     height: 200px;
     overflow: scroll;
@@ -13,7 +17,7 @@
 }
 
 .dropdown-menu > li a {
-    paddingright: 12px;
+    padding-right: 16px;
 }
 
 #themelist .disabled {
