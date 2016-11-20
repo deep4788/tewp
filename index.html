@@ -6,12 +6,23 @@
 
         <link rel="stylesheet" href="./codemirror-5.20.2/lib/codemirror.css">
         <link rel="stylesheet" href="./codemirror-5.20.2/theme/ambiance.css">
-        <link rel="stylesheet" href="./codemirror-5.20.2/theme/xq-light.css">
         <link rel="stylesheet" href="./codemirror-5.20.2/theme/zenburn.css">
         <link rel="stylesheet" href="./codemirror-5.20.2/theme/solarized.css">
-        <link rel="stylesheet" href="./codemirror-5.20.2/theme/icecoder.css">
         <link rel="stylesheet" href="./codemirror-5.20.2/theme/monokai.css">
         <link rel="stylesheet" href="./codemirror-5.20.2/theme/twilight.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/bespin.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/blackboard.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/cobalt.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/dracula.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/elegant.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/isotope.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/lesser-dark.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/liquibyte.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/material.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/midnight.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/night.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/seti.css">
+        <link rel="stylesheet" href="./codemirror-5.20.2/theme/yeti.css">
 
         <link rel="stylesheet" href="./static/css/thirdparty/font-awesome.min.css"/>
         <link rel="stylesheet" href="./static/css/thirdparty/normalize.css"/>
@@ -34,13 +45,24 @@
                             <span class="caret"></span>
                         </button>
                         <ul id="themelist" class="dropdown-menu dropdown-menu-right">
-                            <li><a href="#">ambiance</a></li>
-                            <li><a href="#">xq-light</a></li>
+                            <li class="disabled"><a href="#">ambiance</a></li>
                             <li><a href="#">zenburn</a></li>
                             <li><a href="#">solarized</a></li>
-                            <li><a href="#">icecoder</a></li>
                             <li><a href="#">monokai</a></li>
                             <li><a href="#">twilight</a></li>
+                            <li><a href="#">bespin</a></li>
+                            <li><a href="#">blackboard</a></li>
+                            <li><a href="#">cobalt</a></li>
+                            <li><a href="#">dracula</a></li>
+                            <li><a href="#">elegant</a></li>
+                            <li><a href="#">isotope</a></li>
+                            <li><a href="#">lesser-dark</a></li>
+                            <li><a href="#">liquibyte</a></li>
+                            <li><a href="#">material</a></li>
+                            <li><a href="#">midnight</a></li>
+                            <li><a href="#">night</a></li>
+                            <li><a href="#">seti</a></li>
+                            <li><a href="#">yeti</a></li>
                         </ul>
                     </div>
                 </div>
@@ -55,17 +77,18 @@
             <div class="row">
                 <div class="col-md-6 pull-left">
                     <div class="fileinfo">
-                        <label>Filename: </label><span id="title"></span>
-                        <label>Words: </label><span id="title"></span>
+                        <label>Words: </label><span id="words-length">0</span>
+                        <label>Characters: </label><span id="characters-length">0</span>
                     </div>
                 </div>
                 <div class="col-md-6 pull-right">
-                    <div class="info">
-                        <label>Date: </label><span id="title"></span>
+                    <div class="curr-date">
+                        <label>Date: </label><span id="date-string"></span>
                     </div>
                 </div>
             </div>
         </div>
+
         <script>window.$ = window.jQuery = require("./static/js/thirdparty/jquery-3.1.1.min.js");</script>
         <script src="./static/js/thirdparty/bootstrap.min.js"></script>
         <script src="./codemirror-5.20.2/lib/codemirror.js"></script>
