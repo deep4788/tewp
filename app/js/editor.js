@@ -1,6 +1,6 @@
 "use strict";
 
-const controller = require('./js/controller');
+const controller = require("./js/controller");
 
 //CodeMirror object for editor
 var editor;

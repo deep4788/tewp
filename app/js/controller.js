@@ -1,4 +1,4 @@
-const {dialog} = require('electron').remote;
+const {dialog} = require("electron").remote;
 const fs = require("fs");
 
 /*********************/
@@ -26,16 +26,16 @@ function writeEditorContentsToFile(filename) {
 
 //This function disables the new, open and save buttons
 function disableAllButtons() {
-    $(".new-file").prop('disabled', true);
-    $(".open-file").prop('disabled', true);
-    $(".save-file").prop('disabled', true);
+    $(".new-file").prop("disabled", true);
+    $(".open-file").prop("disabled", true);
+    $(".save-file").prop("disabled", true);
 }
 
 //This function enables the new, open and save buttons
 function enableAllButtons() {
-    $(".new-file").prop('disabled', false);
-    $(".open-file").prop('disabled', false);
-    $(".save-file").prop('disabled', false);
+    $(".new-file").prop("disabled", false);
+    $(".open-file").prop("disabled", false);
+    $(".save-file").prop("disabled", false);
 }
 
 /*******************/
@@ -85,7 +85,7 @@ function createNewFile() {
 function openFile() {
     //Disable all the buttons
     disableAllButtons();
-    dialog.showOpenDialog({properties: ['openFile']}, function(filename) {
+    dialog.showOpenDialog({properties: ["openFile"]}, function(filename) {
         if(typeof filename !== "undefined") {
             readFileContentsIntoEditor(filename[0]);
         }
