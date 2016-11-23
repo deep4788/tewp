@@ -4,19 +4,43 @@ const fs = require("fs");
 /*********************/
 /* Private Functions */
 /*********************/
+//This function reads the file content into the editor
 function readFileContentsIntoEditor(filename) {
     fs.readFile(filename, function(err, data) {
         if(err) {
-            console.log("Error while reading file \"" + filename + "\": " + err);
+            console.error("Error while reading file \"" + filename + "\": " + err);
         }
         editor.setValue(data.toString());
     });
 }
 
+//This function writes the editor content into a file
+function writeEditorContentsToFile(filename) {
+    fs.writeFile(filename, editor.getValue(), function(err) {
+        if(err) {
+            console.error("Error while writing to file \"" + filename + "\": " + err);
+            return;
+        }
+    });
+}
+
+//This function disables the new, open and save buttons
+function disableAllButtons() {
+    $(".new-file").prop('disabled', true);
+    $(".open-file").prop('disabled', true);
+    $(".save-file").prop('disabled', true);
+}
+
+//This function enables the new, open and save buttons
+function enableAllButtons() {
+    $(".new-file").prop('disabled', false);
+    $(".open-file").prop('disabled', false);
+    $(".save-file").prop('disabled', false);
+}
+
 /*******************/
 /* Public Function */
 /*******************/
-
 //This function updates the word and character counts
 var updateWordAndCharacterCount = function(editor) {
     var charactersCount = 0;
@@ -39,6 +63,7 @@ var updateWordAndCharacterCount = function(editor) {
 
 //This function changes the theme of the editor
 function changeTheme(event) {
+    //Set the theme option of the editor
     editor.setOption("theme", $(this).text());
 
     //Find the li element with class = disabled
@@ -47,29 +72,42 @@ function changeTheme(event) {
     $(this).addClass("disabled");
 }
 
+//Create a new file
 function createNewFile() {
-    console.log("new button is clicked");
+    //Empty the editor
     editor.setValue("");
+
+    //Put focus back on the editor
     editor.focus();
 }
 
+//Opens the file
 function openFile() {
-    //Disable the open button so user cannot open multiple instances of dialog
-    $(".open-file").prop('disabled', true);
+    //Disable all the buttons
+    disableAllButtons();
     dialog.showOpenDialog({properties: ['openFile']}, function(filename) {
-        if(typeof filename === "undefined") {
-            console.log("deep it is undefinedth");
-        }
-        else {
-            console.log(filename[0]);
+        if(typeof filename !== "undefined") {
             readFileContentsIntoEditor(filename[0]);
         }
-        $(".open-file").prop('disabled', false);
+        //Enable all the buttons
+        enableAllButtons();
+
+        //Put focus back on the editor
+        editor.focus();
     });
 }
 
+//Saves the file
 function saveFile() {
-    console.log("save file button is clicked");
+    //Disable all the buttons
+    disableAllButtons();
+    dialog.showSaveDialog(function(filename) {
+        if(typeof filename !== "undefined") {
+            writeEditorContentsToFile(filename);
+        }
+        //Enable all the buttons
+        enableAllButtons();
+    });
 }
 
 //Export the internal functions
