@@ -7,6 +7,10 @@ var editor;
 
 //Magic starts here
 function main() {
+    //Set the filename
+    $("#opened-file-name").text("< No File Opened >");
+
+    //Add click events to new, open and save buttons
     $(".new-file").click(function() { controller.createNewFile(); });
     $(".open-file").click(function() { controller.openFile(); });
     $(".save-file").click(function() { controller.saveFile(); });

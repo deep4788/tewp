@@ -88,6 +88,10 @@ function openFile() {
     dialog.showOpenDialog({properties: ["openFile"]}, function(filename) {
         if(typeof filename !== "undefined") {
             readFileContentsIntoEditor(filename[0]);
+
+            //Set the filename
+            var justFileName = filename[0].split("/");
+            $("#opened-file-name").text(justFileName[justFileName.length-1]);
         }
         //Enable all the buttons
         enableAllButtons();
@@ -110,7 +114,7 @@ function saveFile() {
     });
 }
 
-//Export the internal functions
+//Export the public functions
 module.exports = {
     changeTheme,
     updateWordAndCharacterCount,
