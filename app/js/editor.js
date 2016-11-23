@@ -1,10 +1,15 @@
+"use strict";
+
 const controller = require('./js/controller');
+
+//CodeMirror object for editor
+var editor;
 
 //Magic starts here
 function main() {
     $(".new-file").click(function() { controller.createNewFile(); });
-    //$(".open-file").click();
-    //$(".save-file").click();
+    $(".open-file").click(function() { controller.openFile(); });
+    $(".save-file").click(function() { controller.saveFile(); });
 
     //Create a CodeMirror editor instance for the div element "editor"
     editor = CodeMirror($("#editor")[0], {

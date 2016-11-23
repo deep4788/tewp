@@ -1,3 +1,22 @@
+const {dialog} = require('electron').remote;
+const fs = require("fs");
+
+/*********************/
+/* Private Functions */
+/*********************/
+function readFileContentsIntoEditor(filename) {
+    fs.readFile(filename, function(err, data) {
+        if(err) {
+            console.log("Error while reading file \"" + filename + "\": " + err);
+        }
+        editor.setValue(data.toString());
+    });
+}
+
+/*******************/
+/* Public Function */
+/*******************/
+
 //This function updates the word and character counts
 var updateWordAndCharacterCount = function(editor) {
     var charactersCount = 0;
@@ -34,17 +53,30 @@ function createNewFile() {
     editor.focus();
 }
 
-//function openFile() {
-//
-//}
-//
-//function saveFile() {
-//
-//}
+function openFile() {
+    //Disable the open button so user cannot open multiple instances of dialog
+    $(".open-file").prop('disabled', true);
+    dialog.showOpenDialog({properties: ['openFile']}, function(filename) {
+        if(typeof filename === "undefined") {
+            console.log("deep it is undefinedth");
+        }
+        else {
+            console.log(filename[0]);
+            readFileContentsIntoEditor(filename[0]);
+        }
+        $(".open-file").prop('disabled', false);
+    });
+}
+
+function saveFile() {
+    console.log("save file button is clicked");
+}
 
 //Export the internal functions
 module.exports = {
     changeTheme,
     updateWordAndCharacterCount,
-    createNewFile
+    createNewFile,
+    openFile,
+    saveFile
 }

@@ -32,7 +32,7 @@ function createWindow() {
     }));
 
     //Open the DevTools, TODO: this should be removed later on
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     //Emitted when the window is closed
     mainWindow.on('closed', function() {
