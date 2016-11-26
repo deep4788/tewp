@@ -43,13 +43,13 @@ function enableAllButtons() {
 /*******************/
 //This function updates the word and character counts
 var updateWordAndCharacterCount = function(editor) {
-    var charactersCount = 0;
+    //var charactersCount = 0;
     var wordsCount = 0;
 
     //Loop over each line in the editor and process the text
     editor.eachLine(function(line) {
         var text = line.text;
-        charactersCount += text.length;
+        //charactersCount += text.length;
         text = text.trim();
         if(text.length > 0) {
             wordsCount += (text.match(/\s+/g)||[]).length + 1;
@@ -57,7 +57,7 @@ var updateWordAndCharacterCount = function(editor) {
     });
 
     //Update the counts
-    $("#characters-length").text(charactersCount);
+    //$("#characters-length").text(charactersCount);
     $("#words-length").text(wordsCount);
 };
 

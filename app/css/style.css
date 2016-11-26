@@ -11,6 +11,10 @@
     height: 521px;
 }
 
+.dropdown {
+    display: inline;
+}
+
 .dropdown-menu {
     height: 200px;
     overflow: scroll;
@@ -23,4 +27,5 @@
 
 #themelist .disabled {
     font-style: italic;
+    background-color: red; /* change this */
 }

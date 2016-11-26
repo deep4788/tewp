@@ -8,7 +8,7 @@ var editor;
 //Magic starts here
 function main() {
     //Set the filename
-    $("#opened-file-name").text("< No File Opened >");
+    $("#opened-file-name").text("[ No File ]");
 
     //Add click events to new, open and save buttons
     $(".new-file").click(function() { controller.createNewFile(); });
@@ -40,10 +40,3 @@ function main() {
 }
 
 $(document).ready(main());
-
-/*TODO
- * - add event like mouse-over or (something like that) on buttons to change color when mouse-over/hover
- *
- *
- *
- */

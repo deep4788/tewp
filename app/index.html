@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Unique Text Editor</title>
+        <meta name="description" content="A unique and powerful text editor with magical powers written using Electron">
+        <meta name="author" content="Deep Aggarwal">
+        <title>tefu</title>
 
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/lib/codemirror.css">
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/theme/ambiance.css">
@@ -23,24 +25,25 @@
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/theme/night.css">
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/theme/seti.css">
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/theme/yeti.css">
-
-        <link rel="stylesheet" href="./css/font-awesome.min.css"/>
-        <link rel="stylesheet" href="./css/normalize.css"/>
-        <link rel="stylesheet" href="./css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="./css/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="./css/thirdparty/font-awesome-4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="./css/thirdparty/normalize.css"/>
+        <link rel="stylesheet" href="./css/thirdparty/bootstrap.min.css"/>
+        <link rel="stylesheet" href="./css/thirdparty/bootstrap-theme.min.css"/>
         <link rel="stylesheet" href="./css/style.css"/>
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-md-6 pull-left">
-                    <button type="button" class="btn-sm btn-default new-file">New</button>
-                    <button type="button" class="btn-sm btn-default open-file">Open</button>
-                    <button type="button" class="btn-sm btn-default save-file">Save</button>
+                    <button type="button" class="btn-md btn-default new-file"><i class="fa fa-file-text-o" aria-hidden="true"></i> New</button>
+                    <button type="button" class="btn-md btn-default open-file"><i class="fa fa-folder-open" aria-hidden="true"></i> Open</button>
+                    <button type="button" class="btn-md btn-default save-file"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
                 </div>
                 <div class="col-md-6 pull-right">
+                    <button type="button" class="btn-md btn-default select-mode">Mode: <span id="current-editor-mode"></span></button>
+                    <!-- set the current value of current-editor-mode id to either local or google-docs -->
                     <div class="dropdown">
-                        <button class="btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button class="btn-md btn-default dropdown-toggle" type="button" data-toggle="dropdown">
                             Themes
                             <span class="caret"></span>
                         </button>
@@ -79,7 +82,7 @@
                     <div class="file-info">
                         <label>Filename: </label><span id="opened-file-name"></span>
                         <label>Words: </label><span id="words-length">0</span>
-                        <label>Characters: </label><span id="characters-length">0</span>
+                        <!--<label>Characters: </label><span id="characters-length">0</span>-->
                     </div>
                 </div>
                 <div class="col-md-6 pull-right">
@@ -90,8 +93,8 @@
             </div>
         </div>
 
-        <script>window.$ = window.jQuery = require("./js/jquery-3.1.1.min.js");</script>
-        <script src="./js/bootstrap.min.js"></script>
+        <script>window.$ = window.jQuery = require("./js/thirdparty/jquery-3.1.1.min.js");</script>
+        <script src="./js/thirdparty/bootstrap.min.js"></script>
         <script src="./lib/codemirror-5.20.2/lib/codemirror.js"></script>
         <script src="./lib/codemirror-5.20.2/mode/javascript/javascript.js"></script>
         <script src="./js/editor.js"></script>

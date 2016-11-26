@@ -20,7 +20,7 @@ function createWindow() {
         height: 600,
         resizable: false,
         maximizable: false,
-        title: "Unique Text Editor",
+        title: "tefu",
         backgroundColor: "#3b3a36"
     });
 
@@ -31,8 +31,8 @@ function createWindow() {
         slashes: true
     }));
 
-    //Open the DevTools, TODO: this should be removed later on
-    mainWindow.webContents.openDevTools();
+    //Open the DevTools, NOTE: this is only for development purpose
+    //mainWindow.webContents.openDevTools();
 
     //Emitted when the window is closed
     mainWindow.on("closed", function() {
