@@ -1,13 +1,9 @@
-const jsonfile = require('jsonfile');
+const jsonfile = require("jsonfile");
 
 /*********************/
 /* Private Functions */
 /*********************/
-var settingsFile = require('electron').remote.getGlobal('sharedObject').settingsFile;
-
-/*******************/
-/* Public Function */
-/*******************/
+var settingsFile = require("electron").remote.getGlobal("sharedObject").settingsFile;
 
 /**
  * @brief This function returns a JSON object of app settings
@@ -23,14 +19,30 @@ function getSettings() {
     }
 }
 
+/*******************/
+/* Public Function */
+/*******************/
 /**
- * @brief This function changes the setting for a given
+ * @brief This function gets the setting value for @settingKey
+ *
+ * @param settingKey The setting name/key
+ */
+function getSetting(settingKey) {
+    var appSettings = getSettings();
+    if(appSettings[settingKey] === undefined) {
+        console.error("Error while trying to fetch a setting");
+    }
+    return appSettings[settingKey];
+}
+
+/**
+ * @brief This function sets the setting for a given
  *  key with the new value
  *
  * @param settingKey The setting name/key
  * @param settingValue The new value for the @settingKey
  */
-function changeSetting(settingKey, settingValue) {
+function setSetting(settingKey, settingValue) {
     var appSettings = getSettings();
     appSettings[settingKey] = settingValue;
 
@@ -39,6 +51,6 @@ function changeSetting(settingKey, settingValue) {
 
 //Export the public functions
 module.exports = {
-    getSettings,
-    changeSetting
+    getSetting,
+    setSetting
 }

@@ -7,7 +7,7 @@ const BrowserWindow = electron.BrowserWindow;  //Module to create native browser
 //const Tray = electron.Tray;  //Module to add icons and context menus to the system"s notification area TODO
 
 //Load other necessary useful modules
-const jsonfile = require('jsonfile')
+const jsonfile = require("jsonfile")
 const path = require("path");
 const url = require("url");
 
@@ -20,7 +20,7 @@ jsonfile.readFile(settingsFile, function(err, obj) {
         var settingsJson = {
             theme: "ambiance",
             mode: "local",
-            filename: "",
+            filename: "[ No File ]",
             filelocation: ""
         };
         jsonfile.writeFile(settingsFile, settingsJson, function(err) {

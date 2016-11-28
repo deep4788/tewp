@@ -8,17 +8,10 @@ var editor;
 
 //Magic starts here
 function main() {
-    //Load app settings TODO
-    var settingsObj = appsettings.getSettings();
-    console.log(settingsObj);
-    console.log("theme1: " + settingsObj["theme"]);
-    console.log("mode1: " + settingsObj["mode"]);
-    appsettings.changeSetting("theme", "dummy");
-    settingsObj = appsettings.getSettings();
-    console.log("theme2: " + settingsObj["theme"]);
-
-    //Set the filename
-    $("#opened-file-name").text("[ No File ]");
+    //Load the settings: theme, mode, filename
+    const savedTheme = appsettings.getSetting("theme");
+    $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
+    $("#opened-file-name").text(appsettings.getSetting("filename"));
 
     //Add click events to new, open and save buttons
     $(".new-file").click(function() { controller.createNewFile(); });
@@ -28,7 +21,7 @@ function main() {
     //Create a CodeMirror editor instance for the div element "editor"
     editor = CodeMirror($("#editor")[0], {
             lineNumbers: true,
-            theme: "ambiance",
+            theme: savedTheme,
             autofocus: true,
             viewportMargin: Infinity
     });
@@ -36,7 +29,9 @@ function main() {
     //Create an event handler for changing theme
     var themelist = $("#themelist");
     themelist.on("click", "li", { themelist: themelist }, controller.changeTheme);
-    //TODO add another event handler to themelist to update the database
+    themelist.on("click", "li", function() {
+        appsettings.setSetting("theme", $(this).text());
+    });
 
     //Set the current date
     var currdate = new Date();
