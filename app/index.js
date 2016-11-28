@@ -1,11 +1,35 @@
 "use strict";
 
+//Load Electron related modules
 const electron = require("electron");
 const app = electron.app;  //Module to control application life
 const BrowserWindow = electron.BrowserWindow;  //Module to create native browser window
 //const Tray = electron.Tray;  //Module to add icons and context menus to the system"s notification area TODO
+
+//Load other necessary useful modules
+const jsonfile = require('jsonfile')
 const path = require("path");
 const url = require("url");
+
+//Configure default settings for the app and save the settings
+var settingsFile = app.getPath("userData") + "/settings.json";
+global.sharedObject = { settingsFile: settingsFile };
+jsonfile.readFile(settingsFile, function(err, obj) {
+    if(err) {
+        //Settings file does not exist, so create it
+        var settingsJson = {
+            theme: "ambiance",
+            mode: "local",
+            filename: "",
+            filelocation: ""
+        };
+        jsonfile.writeFile(settingsFile, settingsJson, function(err) {
+            if(err) {
+                console.error("Error while writing to settings file: " + err);
+            }
+        });
+    }
+});
 
 //Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected
@@ -20,7 +44,7 @@ function createWindow() {
         height: 600,
         resizable: false,
         maximizable: false,
-        title: "tefu",
+        title: "tewp",
         backgroundColor: "#3b3a36"
     });
 
@@ -32,7 +56,7 @@ function createWindow() {
     }));
 
     //Open the DevTools, NOTE: this is only for development purpose
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     //Emitted when the window is closed
     mainWindow.on("closed", function() {

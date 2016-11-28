@@ -1,26 +1,31 @@
 {
-    "name": "UniqueTextEditor",
-    "version": "1.0.0",
-    "description": "A very unique and useful text-editor written using Electron",
-    "author": "Deep Aggarwal <deep.uiuc@gmail.com>",
-    "main": "app",
-    "scripts": {
-        "start": "electron app"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/deep4788/uniqueTextEditor"
-    },
-    "keywords": [
-        "electron",
-        "node.js",
-        "notes",
-        "text",
-        "editor",
-        "javascript"
-    ],
-    "dependencies": {
-        "electron": "^1.4.1"
-    },
-    "license": "MIT"
+  "name": "tewp",
+  "version": "1.0.0",
+  "description": "A unique and powerful text editor with magical powers written using Electron",
+  "author": "Deep Aggarwal <deep.uiuc@gmail.com>",
+  "main": "app",
+  "scripts": {
+    "start": "electron app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deep4788/tewp"
+  },
+  "keywords": [
+    "electron",
+    "node.js",
+    "notes",
+    "text",
+    "editor",
+    "javascript",
+    "googleapis",
+    "google-docs"
+  ],
+  "dependencies": {
+    "electron": "^1.4.1",
+    "google-auth-library": "0.9.10",
+    "googleapis": "14.2.0",
+    "jsonfile": "2.4.0"
+  },
+  "license": "MIT"
 }

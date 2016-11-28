@@ -74,6 +74,8 @@ function changeTheme(event) {
 
 //Create a new file
 function createNewFile() {
+    //TODO add a dialog that pops if there is unsaved content in the editor
+
     //Empty the editor
     editor.setValue("");
 
@@ -92,6 +94,8 @@ function openFile() {
             //Set the filename
             var justFileName = filename[0].split("/");
             $("#opened-file-name").text(justFileName[justFileName.length-1]);
+
+            //TODO update the database with the filename and location so that next time this file can be opened again
         }
         //Enable all the buttons
         enableAllButtons();

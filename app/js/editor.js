@@ -1,12 +1,22 @@
 "use strict";
 
 const controller = require("./js/controller");
+const appsettings = require("./js/settings");
 
 //CodeMirror object for editor
 var editor;
 
 //Magic starts here
 function main() {
+    //Load app settings TODO
+    var settingsObj = appsettings.getSettings();
+    console.log(settingsObj);
+    console.log("theme1: " + settingsObj["theme"]);
+    console.log("mode1: " + settingsObj["mode"]);
+    appsettings.changeSetting("theme", "dummy");
+    settingsObj = appsettings.getSettings();
+    console.log("theme2: " + settingsObj["theme"]);
+
     //Set the filename
     $("#opened-file-name").text("[ No File ]");
 
@@ -26,6 +36,7 @@ function main() {
     //Create an event handler for changing theme
     var themelist = $("#themelist");
     themelist.on("click", "li", { themelist: themelist }, controller.changeTheme);
+    //TODO add another event handler to themelist to update the database
 
     //Set the current date
     var currdate = new Date();
@@ -35,8 +46,8 @@ function main() {
     editor.on("change", controller.updateWordAndCharacterCount);
     controller.updateWordAndCharacterCount(editor);
 
-    //Put the cursor at the end of the document
-    editor.execCommand("goDocEnd");
+    //Put focus on the editor
+    editor.focus();
 }
 
 $(document).ready(main());
