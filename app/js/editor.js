@@ -8,10 +8,11 @@ var editor;
 
 //Magic starts here
 function main() {
-    //Load the settings: theme, mode, filename
-    const savedTheme = appsettings.getSetting("theme");
+    //Load the settings
     $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
     $("#opened-file-name").text(appsettings.getSetting("filename"));
+    const savedTheme = appsettings.getSetting("theme");
+    $("#themelist #" + savedTheme).addClass("disabled");
 
     //Add click events to new, open and save buttons
     $(".new-file").click(function() { controller.createNewFile(); });
@@ -32,6 +33,9 @@ function main() {
     themelist.on("click", "li", function() {
         appsettings.setSetting("theme", $(this).text());
     });
+
+    //Create an event handler for changing mode
+    $(".select-mode").on("click", controller.changeMode);
 
     //Set the current date
     var currdate = new Date();

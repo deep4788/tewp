@@ -61,6 +61,13 @@ var updateWordAndCharacterCount = function(editor) {
     $("#words-length").text(wordsCount);
 };
 
+//This function changes the mode: local or gdocs
+function changeMode() {
+    var currText = $(".select-mode #current-editor-mode").text();
+    $(".select-mode #current-editor-mode").text(currText == "local" ? "gdocs" : "local");
+    $(this).blur();
+}
+
 //This function changes the theme of the editor
 function changeTheme(event) {
     //Set the theme option of the editor
@@ -120,6 +127,7 @@ function saveFile() {
 
 //Export the public functions
 module.exports = {
+    changeMode,
     changeTheme,
     updateWordAndCharacterCount,
     createNewFile,
