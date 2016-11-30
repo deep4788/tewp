@@ -1,6 +1,13 @@
 # tewp: Text Editor with Powers
 
-`tewp`: A unique and powerful text editor with magical powers written using Electron <http://electron.atom.io/>.
+`tewp`: A unique text editor with magical powers written using Electron <http://electron.atom.io/>.
+
+#### Features
+TODO finish this section
+- Themes
+- Mode: local and Google drive
+- number of words
+- save settings: last file opened, theme selection, mode etc
 
 Installation
 ------------

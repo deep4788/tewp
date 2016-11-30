@@ -3,7 +3,7 @@ const jsonfile = require("jsonfile");
 /*********************/
 /* Private Functions */
 /*********************/
-var settingsFile = require("electron").remote.getGlobal("sharedObject").settingsFile;
+var settingsFile = require("electron").remote.getGlobal("sharedSettingObj").settingsFile;
 
 /**
  * @brief This function returns a JSON object of app settings

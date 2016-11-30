@@ -1,7 +1,7 @@
 {
   "name": "tewp",
   "version": "1.0.0",
-  "description": "A unique and powerful text editor with magical powers written using Electron",
+  "description": "A unique text editor with magical powers written using Electron",
   "author": "Deep Aggarwal <deep.uiuc@gmail.com>",
   "main": "app",
   "scripts": {

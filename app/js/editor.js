@@ -2,6 +2,7 @@
 
 const controller = require("./js/controller");
 const appsettings = require("./js/settings");
+//const googleDrive  = require("./js/gdrive");
 
 //CodeMirror object for editor
 var editor;
@@ -9,10 +10,7 @@ var editor;
 //Magic starts here
 function main() {
     //Load the settings
-    $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
-    $("#opened-file-name").text(appsettings.getSetting("filename"));
-    const savedTheme = appsettings.getSetting("theme");
-    $("#themelist #" + savedTheme).addClass("disabled");
+    controller.loadSettings();
 
     //Add click events to new, open and save buttons
     $(".new-file").click(function() { controller.createNewFile(); });
@@ -22,7 +20,7 @@ function main() {
     //Create a CodeMirror editor instance for the div element "editor"
     editor = CodeMirror($("#editor")[0], {
             lineNumbers: true,
-            theme: savedTheme,
+            theme: appsettings.getSetting("theme"),
             autofocus: true,
             viewportMargin: Infinity
     });
@@ -30,9 +28,6 @@ function main() {
     //Create an event handler for changing theme
     var themelist = $("#themelist");
     themelist.on("click", "li", { themelist: themelist }, controller.changeTheme);
-    themelist.on("click", "li", function() {
-        appsettings.setSetting("theme", $(this).text());
-    });
 
     //Create an event handler for changing mode
     $(".select-mode").on("click", controller.changeMode);

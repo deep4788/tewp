@@ -1,5 +1,6 @@
 const {dialog} = require("electron").remote;
 const fs = require("fs");
+const appsettings = require("./settings");
 
 /*********************/
 /* Private Functions */
@@ -9,6 +10,7 @@ function readFileContentsIntoEditor(filename) {
     fs.readFile(filename, function(err, data) {
         if(err) {
             console.error("Error while reading file \"" + filename + "\": " + err);
+            //TODO instead of this error message, show a pop-up/dialog with error message and with a cancel or ok button on it
         }
         editor.setValue(data.toString());
     });
@@ -24,23 +26,39 @@ function writeEditorContentsToFile(filename) {
     });
 }
 
-//This function disables the new, open and save buttons
+//This function disables the buttons
 function disableAllButtons() {
     $(".new-file").prop("disabled", true);
     $(".open-file").prop("disabled", true);
     $(".save-file").prop("disabled", true);
+    $(".dropdown-toggle").prop("disabled", true);
+    $(".select-mode").prop("disabled", true);
 }
 
-//This function enables the new, open and save buttons
+//This function enables the buttons
 function enableAllButtons() {
     $(".new-file").prop("disabled", false);
     $(".open-file").prop("disabled", false);
     $(".save-file").prop("disabled", false);
+    $(".dropdown-toggle").prop("disabled", false);
+    $(".select-mode").prop("disabled", false);
 }
 
 /*******************/
 /* Public Function */
 /*******************/
+//This function loads the settings; last save settings
+function loadSettings() {
+    $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
+    $("#opened-file-name").text(appsettings.getSetting("filename"));
+    $("#themelist #" + appsettings.getSetting("theme")).addClass("disabled");
+
+    //Load the last opened file in the editor
+    if(appsettings.getSetting("filelocation") !== "") {
+        readFileContentsIntoEditor(appsettings.getSetting("filelocation"));
+    }
+}
+
 //This function updates the word and character counts
 var updateWordAndCharacterCount = function(editor) {
     //var charactersCount = 0;
@@ -66,6 +84,9 @@ function changeMode() {
     var currText = $(".select-mode #current-editor-mode").text();
     $(".select-mode #current-editor-mode").text(currText == "local" ? "gdocs" : "local");
     $(this).blur();
+
+    //Update the settings
+    appsettings.setSetting("mode", $(".select-mode #current-editor-mode").text());
 }
 
 //This function changes the theme of the editor
@@ -77,6 +98,9 @@ function changeTheme(event) {
     var currDisabledLi = event.data.themelist.find(".disabled")
     currDisabledLi.removeClass("disabled");
     $(this).addClass("disabled");
+
+    //Update the settings
+    appsettings.setSetting("theme", $(this).text());
 }
 
 //Create a new file
@@ -86,8 +110,15 @@ function createNewFile() {
     //Empty the editor
     editor.setValue("");
 
+    //Clear the filename label
+    $("#opened-file-name").text("[ No File ]");
+
     //Put focus back on the editor
     editor.focus();
+
+    //Update the settings for filename and filelocation
+    appsettings.setSetting("filename", "[ No File ]");
+    appsettings.setSetting("filelocation", "");
 }
 
 //Opens the file
@@ -102,7 +133,9 @@ function openFile() {
             var justFileName = filename[0].split("/");
             $("#opened-file-name").text(justFileName[justFileName.length-1]);
 
-            //TODO update the database with the filename and location so that next time this file can be opened again
+            //Update the settings
+            appsettings.setSetting("filename", justFileName[justFileName.length-1]);
+            appsettings.setSetting("filelocation", filename[0]);
         }
         //Enable all the buttons
         enableAllButtons();
@@ -119,6 +152,14 @@ function saveFile() {
     dialog.showSaveDialog(function(filename) {
         if(typeof filename !== "undefined") {
             writeEditorContentsToFile(filename);
+
+            //Set the filename
+            var justFileName = filename.split("/");
+            $("#opened-file-name").text(justFileName[justFileName.length-1]);
+
+            //Update the settings
+            appsettings.setSetting("filename", justFileName[justFileName.length-1]);
+            appsettings.setSetting("filelocation", filename);
         }
         //Enable all the buttons
         enableAllButtons();
@@ -127,6 +168,7 @@ function saveFile() {
 
 //Export the public functions
 module.exports = {
+    loadSettings,
     changeMode,
     changeTheme,
     updateWordAndCharacterCount,
