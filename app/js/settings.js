@@ -1,7 +1,7 @@
 const jsonfile = require("jsonfile");
 
 /*********************/
-/* Private Functions */
+/* Private functions */
 /*********************/
 var settingsFile = require("electron").remote.getGlobal("sharedSettingObj").settingsFile;
 
@@ -15,13 +15,13 @@ function getSettings() {
         return jsonfile.readFileSync(settingsFile);
     }
     catch(err) {
-        console.error("Error while reading from settings file: " + err);
+        return console.error("Error while reading from settings file: " + err);
     }
 }
 
-/*******************/
-/* Public Function */
-/*******************/
+/********************************/
+/* Public functions and objects */
+/********************************/
 /**
  * @brief This function gets the setting value for @settingKey
  *
@@ -30,7 +30,7 @@ function getSettings() {
 function getSetting(settingKey) {
     var appSettings = getSettings();
     if(appSettings[settingKey] === undefined) {
-        console.error("Error while trying to fetch a setting");
+        return console.error("Error while trying to fetch a setting");
     }
     return appSettings[settingKey];
 }

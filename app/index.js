@@ -35,15 +35,22 @@ jsonfile.readFile(settingsFile, function(err, obj) {
     }
 });
 
+//TODO make all single quotes in all files to double quotes
+
 //Save the client't secret file (with Google Drive credentials) to application data directory
 try {
-    fs.renameSync(app.getAppPath()+"/client_secret.json", app.getPath("userData")+"/client_secret.json");
-    global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: app.getPath("userData")+"/client_secret.json" };
+    fs.existsSync(app.getPath("userData")+"/client_secret.json");
 }
 catch(err) {
-    console.error(err);
-    process.exit();
+    try {
+        fs.renameSync(app.getAppPath()+"/client_secret.json", app.getPath("userData")+"/client_secret.json");
+    }
+    catch(err) {
+        console.error(err);
+        process.exit();
+    }
 }
+global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: app.getPath("userData")+"/client_secret.json" };
 
 //Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected

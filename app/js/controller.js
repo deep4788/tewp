@@ -1,5 +1,6 @@
 const {dialog} = require("electron").remote;
 const fs = require("fs");
+const gdriveapi = require("./gdrive");
 const appsettings = require("./settings");
 
 /*********************/
@@ -9,8 +10,9 @@ const appsettings = require("./settings");
 function readFileContentsIntoEditor(filename) {
     fs.readFile(filename, function(err, data) {
         if(err) {
-            console.error("Error while reading file \"" + filename + "\": " + err);
+            return console.error("Error while reading file \"" + filename + "\": " + err);
             //TODO instead of this error message, show a pop-up/dialog with error message and with a cancel or ok button on it
+            //dialog.showErrorBox("File Save Error", err.message);
         }
         editor.setValue(data.toString());
     });
@@ -20,8 +22,7 @@ function readFileContentsIntoEditor(filename) {
 function writeEditorContentsToFile(filename) {
     fs.writeFile(filename, editor.getValue(), function(err) {
         if(err) {
-            console.error("Error while writing to file \"" + filename + "\": " + err);
-            return;
+            return console.error("Error while writing to file \"" + filename + "\": " + err);
         }
     });
 }
@@ -48,7 +49,7 @@ function enableAllButtons() {
 /* Public Function */
 /*******************/
 //This function loads the settings; last save settings
-function loadSettings() {
+var loadSettings = function loadSettings() {
     $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
     $("#opened-file-name").text(appsettings.getSetting("filename"));
     $("#themelist #" + appsettings.getSetting("theme")).addClass("disabled");
@@ -60,7 +61,7 @@ function loadSettings() {
 }
 
 //This function updates the word and character counts
-var updateWordAndCharacterCount = function(editor) {
+var updateWordAndCharacterCount = function updateWordAndCharacterCount(editor) {
     //var charactersCount = 0;
     var wordsCount = 0;
 
@@ -80,7 +81,7 @@ var updateWordAndCharacterCount = function(editor) {
 };
 
 //This function changes the mode: local or gdocs
-function changeMode() {
+var changeMode = function changeMode() {
     var currText = $(".select-mode #current-editor-mode").text();
     $(".select-mode #current-editor-mode").text(currText == "local" ? "gdocs" : "local");
     $(this).blur();
@@ -90,7 +91,7 @@ function changeMode() {
 }
 
 //This function changes the theme of the editor
-function changeTheme(event) {
+var changeTheme = function changeTheme(event) {
     //Set the theme option of the editor
     editor.setOption("theme", $(this).text());
 
@@ -104,8 +105,9 @@ function changeTheme(event) {
 }
 
 //Create a new file
-function createNewFile() {
+var createNewFile = function createNewFile() {
     //TODO add a dialog that pops if there is unsaved content in the editor
+    //dialog.showErrorBox("File Save Error", err.message); modify this message here
 
     //Empty the editor
     editor.setValue("");
@@ -122,48 +124,74 @@ function createNewFile() {
 }
 
 //Opens the file
-function openFile() {
+var openFile = function openFile() {
     //Disable all the buttons
     disableAllButtons();
-    dialog.showOpenDialog({properties: ["openFile"]}, function(filename) {
-        if(typeof filename !== "undefined") {
-            readFileContentsIntoEditor(filename[0]);
 
-            //Set the filename
-            var justFileName = filename[0].split("/");
-            $("#opened-file-name").text(justFileName[justFileName.length-1]);
+    //Check if the mode is local or gdocs
+    if(appsettings.getSetting("mode") === "local") {
+        dialog.showOpenDialog({properties: ["openFile"]}, function(filename) {
+            if(typeof filename !== "undefined") {
+                readFileContentsIntoEditor(filename[0]);
 
-            //Update the settings
-            appsettings.setSetting("filename", justFileName[justFileName.length-1]);
-            appsettings.setSetting("filelocation", filename[0]);
-        }
+                //Set the filename
+                var justFileName = filename[0].split("/");
+                $("#opened-file-name").text(justFileName[justFileName.length-1]);
+
+                //Update the settings
+                appsettings.setSetting("filename", justFileName[justFileName.length-1]);
+                appsettings.setSetting("filelocation", filename[0]);
+            }
+
+            //Enable all the buttons
+            enableAllButtons();
+
+            //Put focus back on the editor
+            editor.focus();
+        });
+    }
+    else {
+        gdriveapi.communicateToGoogleDrive();
+
         //Enable all the buttons
         enableAllButtons();
-
-        //Put focus back on the editor
-        editor.focus();
-    });
+    }
 }
 
 //Saves the file
-function saveFile() {
+var saveFile = function saveFile() {
     //Disable all the buttons
     disableAllButtons();
-    dialog.showSaveDialog(function(filename) {
-        if(typeof filename !== "undefined") {
-            writeEditorContentsToFile(filename);
 
-            //Set the filename
-            var justFileName = filename.split("/");
-            $("#opened-file-name").text(justFileName[justFileName.length-1]);
+    //Check if the mode is local or gdocs
+    if(appsettings.getSetting("mode") === "local") {
+        dialog.showSaveDialog(function(filename) {
+            if(typeof filename !== "undefined") {
+                writeEditorContentsToFile(filename);
 
-            //Update the settings
-            appsettings.setSetting("filename", justFileName[justFileName.length-1]);
-            appsettings.setSetting("filelocation", filename);
-        }
+                //Set the filename
+                var justFileName = filename.split("/");
+                $("#opened-file-name").text(justFileName[justFileName.length-1]);
+
+                //Update the settings
+                appsettings.setSetting("filename", justFileName[justFileName.length-1]);
+                appsettings.setSetting("filelocation", filename);
+
+                //Show message to the user that the file has been saved
+                dialog.showMessageBox({ message: "The file has been saved! :)", buttons: ["OK"] });
+                //TODO: Add custom icon to this using options: https://github.com/electron/electron/blob/master/docs/api/dialog.md
+            }
+            //Enable all the buttons
+            enableAllButtons();
+        });
+    }
+    else {
+        //gdriveapi.communicateToGoogleDrive(); TODO use this not the line below this
+        $('#save-file-dialog').modal();
+
         //Enable all the buttons
         enableAllButtons();
-    });
+    }
 }
 
 //Export the public functions

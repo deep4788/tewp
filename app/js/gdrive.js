@@ -6,9 +6,9 @@ var googleAuth = require("google-auth-library");
 /*********************/
 /* Private Functions */
 /*********************/
-//TODO remove the comments from here later on and move
-//var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
-//console.log("clientSecretFileLocation: " + clientSecretFileLocation);
+//TODO remove the comments from here later on
+var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
+console.log("clientSecretFileLocation: " + clientSecretFileLocation);
 
 //If modifying these scopes, delete previously saved credentials at ~/.credentials/google-drive-nodejs-tewp-project.json
 var SCOPES = [
@@ -20,14 +20,14 @@ var TOKEN_PATH = TOKEN_DIR + "google-drive-nodejs-tewp-project.json";
 
 //Load client secrets from a local file
 //TODO change the path to client_secret.json; use the var clientSecretFileLocation from above
-fs.readFile("client_secret.json", function processClientSecrets(err, content) {
-    if(err) {
-        return console.error("Error loading client secret file: " + err);
-    }
-
-    //Authorize the client with the loaded credentials, then call the Google Drive API.
-    authorize(JSON.parse(content), getGdriveFileData);
-});
+//fs.readFile("client_secret.json", function processClientSecrets(err, content) {
+//    if(err) {
+//        return console.error("Error loading client secret file: " + err);
+//    }
+//
+//    //Authorize the client with the loaded credentials, then call the Google Drive API.
+//    authorize(JSON.parse(content), getGdriveFileData);
+//});
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -50,6 +50,7 @@ function authorize(credentials, callback) {
         }
         else {
             oauth2Client.credentials = JSON.parse(token);
+            console.log("deep check 2");
             callback(oauth2Client);
         }
     });
@@ -105,9 +106,6 @@ function storeToken(token) {
     console.log("Token stored to " + TOKEN_PATH);
 }
 
-/*******************/
-/* Public Function */
-/*******************/
 function getGdriveFileData(auth) {
     var fileId = '1K01EgMi_wrSJLbKZG5Pk-GnLuJITSP_wFpPNYD02kLU';
     var service = google.drive("v3");
@@ -146,11 +144,20 @@ function listGdriveFiles(auth) {
         }
         else {
             console.log("Files:");
+            //for(var i = 0; i < files.length; i++) {
+            //    var file = files[i];
+            //    console.log("%s: %s", file.id, file.name);
+            //}
+            ////TODO Return the list
+            console.log("deep check 3");
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
-                console.log("%s: %s", file.id, file.name);
+                $('#select-google-drive-file').append($('<option>', {
+                    value: file.id,
+                    text : file.name
+                }));
             }
-            //TODO Return the list
+            $('#open-file-dialog').modal();
         }
     });
 }
@@ -215,9 +222,22 @@ function updateGdriveFile(auth) {
     });
 }
 
+/*******************/
+/* Public Function */
+/*******************/
+function communicateToGoogleDrive() {
+    fs.readFile(clientSecretFileLocation, function processClientSecrets(err, content) {
+        if(err) {
+            return console.error("Error loading client secret file: " + err);
+        }
+
+        //Authorize the client with the loaded credentials, then call the Google Drive API.
+        console.log("deep check 1");
+        authorize(JSON.parse(content), listGdriveFiles);
+    });
+}
+
 //Export the public functions
-//module.exports = {
-//    listGdriveFiles,
-//    createGdriveFile,
-//    updateGdriveFile
-//}
+module.exports = {
+    communicateToGoogleDrive,
+}

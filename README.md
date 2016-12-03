@@ -5,7 +5,7 @@
 #### Features
 TODO finish this section
 - Themes
-- Mode: local and Google drive
+- Mode: local and Google drive (Google Docs)
 - number of words
 - save settings: last file opened, theme selection, mode etc
 

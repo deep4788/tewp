@@ -91,6 +91,44 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modals for Open button for handling Google Drive API communication -->
+            <div class="modal fade" id="open-file-dialog" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Open Google Drive File</h4>
+                        </div>
+                        <div class="modal-body open-file-dialog-body">
+                            <label for="select-google-drive-file">Select a file</label>
+                            <select class="form-control" id="select-google-drive-file" size="5">
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-md btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn-md btn-primary">Open</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- /.modal -->
+
+            <!-- Modals for Save button for handling Google Drive API communication -->
+            <div class="modal fade" id="save-file-dialog" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Save file to Google Drive</h4>
+                        </div>
+                        <div class="modal-body save-file-dialog-body">
+                            Save as: <input id="save-file-dialog-filename" type="text" name="filename" placeholder="Enter file name" size="50">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-md btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn-md btn-primary">Save</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- /.modal -->
         </div>
 
         <script>window.$ = window.jQuery = require("./js/thirdparty/jquery-3.1.1.min.js");</script>
