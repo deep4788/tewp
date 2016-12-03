@@ -24,7 +24,7 @@ var TOKEN_PATH = TOKEN_DIR + "google-drive-nodejs-tewp-project.json";
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, fileid, callback) {
+function authorize(credentials, fileDataObj, callback) {
     var clientSecret = credentials.installed.client_secret;
     var clientId = credentials.installed.client_id;
     var redirectUrl = credentials.installed.redirect_uris[0];
@@ -38,7 +38,7 @@ function authorize(credentials, fileid, callback) {
         }
         else {
             oauth2Client.credentials = JSON.parse(token);
-            callback(oauth2Client, fileid);
+            callback(oauth2Client, fileDataObj);
         }
     });
 }
@@ -81,7 +81,6 @@ function getNewToken(oauth2Client, callback) {
  */
 function storeToken(token) {
     try {
-        console.log("it exists deep");
         fs.mkdirSync(TOKEN_DIR);
     }
     catch(err) {
@@ -97,10 +96,10 @@ function storeToken(token) {
  * @brief Get the file data and update the editor
  *
  * @param auth An authorized OAuth2 client
- * @param fileid The id of the file to be read
+ * @param fileDataObj The file object containing file's metadata
  */
-function getGdriveFileData(auth, fileid) {
-    var fileId = fileid;
+function getGdriveFileData(auth, fileDataObj) {
+    var fileId = fileDataObj.fileid;
     var service = google.drive("v3");
     service.files.export({
         auth: auth,
@@ -119,9 +118,9 @@ function getGdriveFileData(auth, fileid) {
  * @brief Lists the files
  *
  * @param auth An authorized OAuth2 client
- * @param fileid The id of the file to be read
+ * @param fileDataObj The file object containing file's metadata
  */
-function listGdriveFiles(auth, fileid) {
+function listGdriveFiles(auth, _) {
     var service = google.drive("v3");
     service.files.list({
         auth: auth,
@@ -137,7 +136,6 @@ function listGdriveFiles(auth, fileid) {
             console.log("No files found in your Google Drive");
         }
         else {
-            console.log("Files:"); //XXX
             //Clear the list and then re-populate it
             $('#select-google-drive-file').empty();
             for(var i = 0; i < files.length; i++) {
@@ -145,7 +143,7 @@ function listGdriveFiles(auth, fileid) {
                 var fileName = file.name.split("_")[1];
                 $('#select-google-drive-file').append($('<option>', {
                     value: file.id,
-                    text : file.name
+                    text : fileName
                 }));
             }
             var modalOptions = {
@@ -159,15 +157,20 @@ function listGdriveFiles(auth, fileid) {
     });
 }
 
-//TODO add comment here
-function createGdriveFile(auth) {
+/**
+ * @brief Create a new file
+ *
+ * @param auth An authorized OAuth2 client
+ * @param fileDataObj The file object containing file's metadata
+ */
+function createGdriveFile(auth, fileDataObj) {
     var fileMetadata = {
-        "name" : "tewpbydeep_projectplan",
+        "name" : "tewpbydeep_" + fileDataObj.filename,
         "mimeType": "application/vnd.google-apps.document"
     };
     var media = {
         mimeType: "text/plain",
-        body: "hi I am deep and this is a new content" //TODO Here is where the text from the editor will be passed
+        body: editor.getValue()
     };
 
     var service = google.drive("v3");
@@ -177,12 +180,15 @@ function createGdriveFile(auth) {
         media: media,
         fields: "id, name" }, function(err, file) {
         if(err) {
-            //Handle error
             console.log(err);
         }
         else {
-            console.log("File Id: ", file.id);
-            console.log("File Id: ", file.name);
+            //TODO showMessage using electron dialog that file has been created
+            //dialog.showMessageBox([browserWindow, ]options[, callback])
+
+            //Update the settings
+            appsettings.setSetting("filename", fileDataObj.filename);
+            appsettings.setSetting("fileid", file.id);
         }
     });
 }
@@ -209,7 +215,6 @@ function updateGdriveFile(auth) {
         fields: "id, name" },
         function(err, file) {
             if(err) {
-                //Handle error
                 return console.error(err);
             }
             else {
@@ -228,7 +233,7 @@ function updateGdriveFile(auth) {
  * @param methodName Internal function to be called using this method name
  * @param fileid The optional file ID that some internal functions need
  */
-function communicateToGoogleDrive(methodName, fileid) {
+function communicateToGoogleDrive(methodName, fileDataObj) {
     fs.readFile(clientSecretFileLocation, function processClientSecrets(err, content) {
         if(err) {
             return console.error("Error loading client secret file: " + err);
@@ -236,10 +241,16 @@ function communicateToGoogleDrive(methodName, fileid) {
 
         //Authorize the client with the loaded credentials, then call the Google Drive API
         if(methodName === "listfiles") {
-            authorize(JSON.parse(content), fileid, listGdriveFiles);
+            authorize(JSON.parse(content), fileDataObj, listGdriveFiles);
         }
         else if(methodName === "getfiledata") {
-            authorize(JSON.parse(content), fileid, getGdriveFileData);
+            authorize(JSON.parse(content), fileDataObj, getGdriveFileData);
+        }
+        else if(methodName === "createnewfile") {
+            authorize(JSON.parse(content), fileDataObj, createGdriveFile);
+        }
+        else if(methodName === "updatefile") {
+            //authorize(JSON.parse(content), fileDataObj, updateGdriveFile);
         }
     });
 }

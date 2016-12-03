@@ -51,13 +51,13 @@ function enableAllButtons() {
 //This function loads the settings; last saved settings
 var loadSettings = function loadSettings() {
     $("#themelist #" + appsettings.getSetting("theme")).addClass("disabled");
+    $("#opened-file-name").text(appsettings.getSetting("filename"));
 
     var mode = appsettings.getSetting("mode");
     $(".select-mode #current-editor-mode").text(mode);
     if(mode === "local") {
         //Load the last opened file in the editor
         if(appsettings.getSetting("filelocation") !== "") {
-            $("#opened-file-name").text(appsettings.getSetting("filename"));
             readFileContentsIntoEditor(appsettings.getSetting("filelocation"));
         }
     }
@@ -65,8 +65,7 @@ var loadSettings = function loadSettings() {
         //Load the Google Drive file in the editor
         var fileid = appsettings.getSetting("fileid");
         if(fileid !== "") {
-            $("#opened-file-name").text(appsettings.getSetting("filename"));
-            gdriveapi.communicateToGoogleDrive("getfiledata", fileid);
+            gdriveapi.communicateToGoogleDrive("getfiledata", { "fileid": fileid, "filename": "" });
         }
     }
 }
@@ -130,6 +129,7 @@ var createNewFile = function createNewFile() {
     editor.focus();
 
     //Update the settings for filename and filelocation
+    appsettings.setSetting("fileid", "");
     appsettings.setSetting("filename", "[ No File ]");
     appsettings.setSetting("filelocation", "");
 }
@@ -163,7 +163,7 @@ var openFile = function openFile() {
     }
     else {
         //Talk to Google Drive module to list the files in the open dialog modal
-        gdriveapi.communicateToGoogleDrive("listfiles", "");
+        gdriveapi.communicateToGoogleDrive("listfiles", { "fileid": "", "filename": "" });
     }
 }
 
@@ -195,24 +195,29 @@ var saveFile = function saveFile() {
         });
     }
     else {
-        //gdriveapi.communicateToGoogleDrive(); TODO use this not the line below this
-        var modalOptions = {
-            "backdrop": "static",
-            "keyboard": "true"
+        var fileid = appsettings.getSetting("fileid");
+        if(fileid === "") {
+            var modalOptions = {
+                "backdrop": "static",
+                "keyboard": "true"
+            }
+            $("#save-file-dialog").modal(modalOptions);
         }
-        $('#save-file-dialog').modal(modalOptions);
+        else {
+            gdriveapi.communicateToGoogleDrive("updatefile", { "fileid": fileid, "filename": "" });
+        }
     }
 }
 
 //Set the editor content to the Google Drive selected file data
 function setGoogleDriveFileDataToEditor() {
     //Get the name and id of the file user has selected
-    var nameOfSelectedFile = $('#select-google-drive-file :selected').text().split("_")[1];
-    var idOfSelectedFile = $('#select-google-drive-file :selected').attr("value");
+    var nameOfSelectedFile = $("#select-google-drive-file :selected").text();
+    var idOfSelectedFile = $("#select-google-drive-file :selected").attr("value");
 
     //Talk to Google Drive module and update the editor
-    gdriveapi.communicateToGoogleDrive("getfiledata", idOfSelectedFile);
-    $('#open-file-dialog').modal("hide");
+    gdriveapi.communicateToGoogleDrive("getfiledata", { "fileid": idOfSelectedFile, "filename": "" });
+    $("#open-file-dialog").modal("hide");
 
     //Update the editor opened file name label
     $("#opened-file-name").text(nameOfSelectedFile);
@@ -223,7 +228,15 @@ function setGoogleDriveFileDataToEditor() {
 }
 
 function saveDataToGoogleDrive() {
+    //Get the filename entered
+    var filename = $("#save-file-dialog-filename").val();
 
+    //Talk to Google Drive module and create the file
+    gdriveapi.communicateToGoogleDrive("createnewfile", { "fileid": "", "filename": filename } );
+    $("#save-file-dialog").modal("hide");
+
+    //Update the editor opened file name label
+    $("#opened-file-name").text(filename);
 }
 
 //Export the public functions
