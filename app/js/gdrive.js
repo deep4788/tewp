@@ -8,7 +8,6 @@ var googleAuth = require("google-auth-library");
 /*********************/
 //TODO remove the comments from here later on
 var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
-console.log("clientSecretFileLocation: " + clientSecretFileLocation);
 
 //If modifying these scopes, delete previously saved credentials at ~/.credentials/google-drive-nodejs-tewp-project.json
 var SCOPES = [
@@ -18,17 +17,6 @@ var SCOPES = [
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE) + "/.credentials/";
 var TOKEN_PATH = TOKEN_DIR + "google-drive-nodejs-tewp-project.json";
 
-//Load client secrets from a local file
-//TODO change the path to client_secret.json; use the var clientSecretFileLocation from above
-//fs.readFile("client_secret.json", function processClientSecrets(err, content) {
-//    if(err) {
-//        return console.error("Error loading client secret file: " + err);
-//    }
-//
-//    //Authorize the client with the loaded credentials, then call the Google Drive API.
-//    authorize(JSON.parse(content), getGdriveFileData);
-//});
-
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
  * given callback function.
@@ -36,7 +24,7 @@ var TOKEN_PATH = TOKEN_DIR + "google-drive-nodejs-tewp-project.json";
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+function authorize(credentials, fileid, callback) {
     var clientSecret = credentials.installed.client_secret;
     var clientId = credentials.installed.client_id;
     var redirectUrl = credentials.installed.redirect_uris[0];
@@ -50,8 +38,7 @@ function authorize(credentials, callback) {
         }
         else {
             oauth2Client.credentials = JSON.parse(token);
-            console.log("deep check 2");
-            callback(oauth2Client);
+            callback(oauth2Client, fileid);
         }
     });
 }
@@ -106,8 +93,14 @@ function storeToken(token) {
     console.log("Token stored to " + TOKEN_PATH);
 }
 
-function getGdriveFileData(auth) {
-    var fileId = '1K01EgMi_wrSJLbKZG5Pk-GnLuJITSP_wFpPNYD02kLU';
+/**
+ * @brief Get the file data and update the editor
+ *
+ * @param auth An authorized OAuth2 client
+ * @param fileid The id of the file to be read
+ */
+function getGdriveFileData(auth, fileid) {
+    var fileId = fileid;
     var service = google.drive("v3");
     service.files.export({
         auth: auth,
@@ -116,17 +109,19 @@ function getGdriveFileData(auth) {
         if(err) {
             return console.error("The API returned an error: " + err);
         }
-        console.dir(response); //TODO This response is the text we need to set in the text editor
-        //TODO deep I was here and just finished this function
+
+        //Update the editor with the file content
+        editor.setValue(response);
     });
 }
 
-/** TODO change this and the 10 files behaviour
- * Lists the names and IDs of up to 10 files.
+/**
+ * @brief Lists the files
  *
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ * @param auth An authorized OAuth2 client
+ * @param fileid The id of the file to be read
  */
-function listGdriveFiles(auth) {
+function listGdriveFiles(auth, fileid) {
     var service = google.drive("v3");
     service.files.list({
         auth: auth,
@@ -139,25 +134,27 @@ function listGdriveFiles(auth) {
         }
         var files = response.files;
         if(files.length === 0) {
-            console.log("No files found.");
-            //TODO Return an empty list
+            console.log("No files found in your Google Drive");
         }
         else {
-            console.log("Files:");
-            //for(var i = 0; i < files.length; i++) {
-            //    var file = files[i];
-            //    console.log("%s: %s", file.id, file.name);
-            //}
-            ////TODO Return the list
-            console.log("deep check 3");
+            console.log("Files:"); //XXX
+            //Clear the list and then re-populate it
+            $('#select-google-drive-file').empty();
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
+                var fileName = file.name.split("_")[1];
                 $('#select-google-drive-file').append($('<option>', {
                     value: file.id,
                     text : file.name
                 }));
             }
-            $('#open-file-dialog').modal();
+            var modalOptions = {
+                "backdrop": "static",
+                "keyboard": "true"
+            }
+
+            //Once the files options elements are added to the select element, open the modal dialog
+            $('#open-file-dialog').modal(modalOptions);
         }
     });
 }
@@ -225,15 +222,25 @@ function updateGdriveFile(auth) {
 /*******************/
 /* Public Function */
 /*******************/
-function communicateToGoogleDrive() {
+/**
+ * @brief External function to help communicate with this module
+ *
+ * @param methodName Internal function to be called using this method name
+ * @param fileid The optional file ID that some internal functions need
+ */
+function communicateToGoogleDrive(methodName, fileid) {
     fs.readFile(clientSecretFileLocation, function processClientSecrets(err, content) {
         if(err) {
             return console.error("Error loading client secret file: " + err);
         }
 
-        //Authorize the client with the loaded credentials, then call the Google Drive API.
-        console.log("deep check 1");
-        authorize(JSON.parse(content), listGdriveFiles);
+        //Authorize the client with the loaded credentials, then call the Google Drive API
+        if(methodName === "listfiles") {
+            authorize(JSON.parse(content), fileid, listGdriveFiles);
+        }
+        else if(methodName === "getfiledata") {
+            authorize(JSON.parse(content), fileid, getGdriveFileData);
+        }
     });
 }
 

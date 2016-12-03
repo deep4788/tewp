@@ -23,6 +23,7 @@ jsonfile.readFile(settingsFile, function(err, obj) {
         var settingsJson = {
             theme: "ambiance",
             mode: "local",
+            fileid: "",
             filename: "[ No File ]",
             filelocation: ""
         };

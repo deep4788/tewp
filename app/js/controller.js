@@ -48,15 +48,26 @@ function enableAllButtons() {
 /*******************/
 /* Public Function */
 /*******************/
-//This function loads the settings; last save settings
+//This function loads the settings; last saved settings
 var loadSettings = function loadSettings() {
-    $(".select-mode #current-editor-mode").text(appsettings.getSetting("mode"));
-    $("#opened-file-name").text(appsettings.getSetting("filename"));
     $("#themelist #" + appsettings.getSetting("theme")).addClass("disabled");
 
-    //Load the last opened file in the editor
-    if(appsettings.getSetting("filelocation") !== "") {
-        readFileContentsIntoEditor(appsettings.getSetting("filelocation"));
+    var mode = appsettings.getSetting("mode");
+    $(".select-mode #current-editor-mode").text(mode);
+    if(mode === "local") {
+        //Load the last opened file in the editor
+        if(appsettings.getSetting("filelocation") !== "") {
+            $("#opened-file-name").text(appsettings.getSetting("filename"));
+            readFileContentsIntoEditor(appsettings.getSetting("filelocation"));
+        }
+    }
+    else {
+        //Load the Google Drive file in the editor
+        var fileid = appsettings.getSetting("fileid");
+        if(fileid !== "") {
+            $("#opened-file-name").text(appsettings.getSetting("filename"));
+            gdriveapi.communicateToGoogleDrive("getfiledata", fileid);
+        }
     }
 }
 
@@ -125,11 +136,11 @@ var createNewFile = function createNewFile() {
 
 //Opens the file
 var openFile = function openFile() {
-    //Disable all the buttons
-    disableAllButtons();
-
     //Check if the mode is local or gdocs
     if(appsettings.getSetting("mode") === "local") {
+        //Disable all the buttons
+        disableAllButtons();
+
         dialog.showOpenDialog({properties: ["openFile"]}, function(filename) {
             if(typeof filename !== "undefined") {
                 readFileContentsIntoEditor(filename[0]);
@@ -151,20 +162,18 @@ var openFile = function openFile() {
         });
     }
     else {
-        gdriveapi.communicateToGoogleDrive();
-
-        //Enable all the buttons
-        enableAllButtons();
+        //Talk to Google Drive module to list the files in the open dialog modal
+        gdriveapi.communicateToGoogleDrive("listfiles", "");
     }
 }
 
 //Saves the file
 var saveFile = function saveFile() {
-    //Disable all the buttons
-    disableAllButtons();
-
     //Check if the mode is local or gdocs
     if(appsettings.getSetting("mode") === "local") {
+        //Disable all the buttons
+        disableAllButtons();
+
         dialog.showSaveDialog(function(filename) {
             if(typeof filename !== "undefined") {
                 writeEditorContentsToFile(filename);
@@ -187,11 +196,34 @@ var saveFile = function saveFile() {
     }
     else {
         //gdriveapi.communicateToGoogleDrive(); TODO use this not the line below this
-        $('#save-file-dialog').modal();
-
-        //Enable all the buttons
-        enableAllButtons();
+        var modalOptions = {
+            "backdrop": "static",
+            "keyboard": "true"
+        }
+        $('#save-file-dialog').modal(modalOptions);
     }
+}
+
+//Set the editor content to the Google Drive selected file data
+function setGoogleDriveFileDataToEditor() {
+    //Get the name and id of the file user has selected
+    var nameOfSelectedFile = $('#select-google-drive-file :selected').text().split("_")[1];
+    var idOfSelectedFile = $('#select-google-drive-file :selected').attr("value");
+
+    //Talk to Google Drive module and update the editor
+    gdriveapi.communicateToGoogleDrive("getfiledata", idOfSelectedFile);
+    $('#open-file-dialog').modal("hide");
+
+    //Update the editor opened file name label
+    $("#opened-file-name").text(nameOfSelectedFile);
+
+    //Update the settings
+    appsettings.setSetting("filename", nameOfSelectedFile);
+    appsettings.setSetting("fileid", idOfSelectedFile);
+}
+
+function saveDataToGoogleDrive() {
+
 }
 
 //Export the public functions
@@ -202,5 +234,7 @@ module.exports = {
     updateWordAndCharacterCount,
     createNewFile,
     openFile,
-    saveFile
+    saveFile,
+    setGoogleDriveFileDataToEditor,
+    saveDataToGoogleDrive
 }

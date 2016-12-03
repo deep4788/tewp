@@ -40,6 +40,10 @@ function main() {
     editor.on("change", controller.updateWordAndCharacterCount);
     controller.updateWordAndCharacterCount(editor);
 
+    //Create event handlers for modal open and save buttons when dealing with Google Drive API
+    $("#modal-open-button").click(function() { controller.setGoogleDriveFileDataToEditor(); });
+    $("#modal-save-button").click(function() { controller.saveDataToGoogleDrive(); });
+
     //Put focus on the editor
     editor.focus();
 }
