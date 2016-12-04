@@ -10,9 +10,8 @@ const appsettings = require("./settings");
 function readFileContentsIntoEditor(filename) {
     fs.readFile(filename, function(err, data) {
         if(err) {
+            dialog.showErrorBox("File Save Error", err.message);
             return console.error("Error while reading file \"" + filename + "\": " + err);
-            //TODO instead of this error message, show a pop-up/dialog with error message and with a cancel or ok button on it
-            //dialog.showErrorBox("File Save Error", err.message);
         }
         editor.setValue(data.toString());
     });
@@ -22,6 +21,7 @@ function readFileContentsIntoEditor(filename) {
 function writeEditorContentsToFile(filename) {
     fs.writeFile(filename, editor.getValue(), function(err) {
         if(err) {
+            dialog.showErrorBox("File Write Error", err.message);
             return console.error("Error while writing to file \"" + filename + "\": " + err);
         }
     });
@@ -98,6 +98,9 @@ var changeMode = function changeMode() {
 
     //Update the settings
     appsettings.setSetting("mode", $(".select-mode #current-editor-mode").text());
+
+    //Set all other settings to empty
+    createNewFile();
 }
 
 //This function changes the theme of the editor
@@ -116,9 +119,6 @@ var changeTheme = function changeTheme(event) {
 
 //Create a new file
 var createNewFile = function createNewFile() {
-    //TODO add a dialog that pops if there is unsaved content in the editor
-    //dialog.showErrorBox("File Save Error", err.message); modify this message here
-
     //Empty the editor
     editor.setValue("");
 
@@ -207,6 +207,9 @@ var saveFile = function saveFile() {
             gdriveapi.communicateToGoogleDrive("updatefile", { "fileid": fileid, "filename": "" });
         }
     }
+
+    //Put focus back on the editor
+    editor.focus();
 }
 
 //Set the editor content to the Google Drive selected file data

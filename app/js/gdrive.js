@@ -1,3 +1,4 @@
+const {dialog} = require("electron").remote;
 var fs = require("fs");
 var readline = require("readline");
 var google = require("googleapis");
@@ -6,7 +7,6 @@ var googleAuth = require("google-auth-library");
 /*********************/
 /* Private Functions */
 /*********************/
-//TODO remove the comments from here later on
 var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
 
 //If modifying these scopes, delete previously saved credentials at ~/.credentials/google-drive-nodejs-tewp-project.json
@@ -110,7 +110,7 @@ function getGdriveFileData(auth, fileDataObj) {
         }
 
         //Update the editor with the file content
-        editor.setValue(response);
+        editor.setValue(response.substring(1));
     });
 }
 
@@ -180,11 +180,11 @@ function createGdriveFile(auth, fileDataObj) {
         media: media,
         fields: "id, name" }, function(err, file) {
         if(err) {
-            console.log(err);
+            console.error(err);
         }
         else {
-            //TODO showMessage using electron dialog that file has been created
-            //dialog.showMessageBox([browserWindow, ]options[, callback])
+            //Show dialog message for confirmation
+            dialog.showMessageBox({ type: "info", message: "The file has been created! :)", buttons: ["OK"] });
 
             //Update the settings
             appsettings.setSetting("filename", fileDataObj.filename);
@@ -193,34 +193,37 @@ function createGdriveFile(auth, fileDataObj) {
     });
 }
 
-//TODO add comment here
-function updateGdriveFile(auth) {
+/**
+ * @brief Update the file content
+ *
+ * @param auth An authorized OAuth2 client
+ * @param fileDataObj The file object containing file's metadata
+ */
+function updateGdriveFile(auth, fileDataObj) {
     var fileMetadata = {
-        "name": "My Report",
-        "mimeType": "application/vnd.google-apps.spreadsheet"
+        "mimeType": "application/vnd.google-apps.document"
+    };
+    var media = {
+        mimeType: "text/plain",
+        body: editor.getValue()
     };
 
-    fileId = "1UXCR8Z4riHrcxkXovjypbg9YSQEjjiBoxQBfL2iG6TQ"; //This is something we will need to pass in when the user clicks on the save button
-    var media = {
-        mimeType: "text/csv",
-        body: fs.createReadStream("/Users/deep/Desktop/mm.csv")
-    };
     var service = google.drive("v3");
-    //service.files.create({ auth: auth, resource: fileMetadata, media: media, fields: "id" }, function(err, file) {
     service.files.update({
         auth: auth,
-        fileId: fileId,
+        fileId: fileDataObj.fileid,
         resource: fileMetadata,
         media: media,
-        fields: "id, name" },
-        function(err, file) {
-            if(err) {
-                return console.error(err);
-            }
-            else {
-                console.log("File Id:" , file.id);
-                console.log("File name:" , file.name);
-            }
+        fields: "id, name" }, function(err, file) {
+        if(err) {
+            return console.error(err);
+        }
+        else {
+            //Show dialog message for confirmation
+            dialog.showMessageBox({ type: "info", message: "The file has been updated! :)", buttons: ["OK"] });
+
+            console.log("File Id:" , file.id);
+        }
     });
 }
 
@@ -239,7 +242,7 @@ function communicateToGoogleDrive(methodName, fileDataObj) {
             return console.error("Error loading client secret file: " + err);
         }
 
-        //Authorize the client with the loaded credentials, then call the Google Drive API
+        //Authorize the client and then call the Google Drive API
         if(methodName === "listfiles") {
             authorize(JSON.parse(content), fileDataObj, listGdriveFiles);
         }
@@ -250,7 +253,7 @@ function communicateToGoogleDrive(methodName, fileDataObj) {
             authorize(JSON.parse(content), fileDataObj, createGdriveFile);
         }
         else if(methodName === "updatefile") {
-            //authorize(JSON.parse(content), fileDataObj, updateGdriveFile);
+            authorize(JSON.parse(content), fileDataObj, updateGdriveFile);
         }
     });
 }
