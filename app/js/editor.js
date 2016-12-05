@@ -1,8 +1,9 @@
 "use strict";
 
-const controller = require("./js/controller");
+const {shell} = require("electron");
 const appsettings = require("./js/settings");
-//const googleDrive  = require("./js/gdrive");
+const controller = require("./js/controller");
+const gdriveapi = require("./js/gdrive");
 
 //CodeMirror object for editor
 var editor;
@@ -43,6 +44,14 @@ function main() {
     //Create event handlers for modal open and save buttons when dealing with Google Drive API
     $("#modal-open-button").click(function() { controller.setGoogleDriveFileDataToEditor(); });
     $("#modal-save-button").click(function() { controller.saveDataToGoogleDrive(); });
+
+    //Create event handlers for modal done button when dealing with authorizing Google Drive API
+    $("#modal-gdrive-auth-done-button").click(function() { gdriveapi.storeToken(); });
+
+    $(document).on("click", "a[href^='http']", function(event) {
+        event.preventDefault();
+        shell.openExternal(this.href);
+    });
 
     //Put focus on the editor
     editor.focus();

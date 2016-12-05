@@ -29,3 +29,8 @@
     font-style: italic;
     background-color: red; /* change this */
 }
+
+#auth-error-message {
+    display: none;
+    color: red;
+}

@@ -120,16 +120,41 @@
                             <h4 class="modal-title">Save file to Google Drive</h4>
                         </div>
                         <div class="modal-body save-file-dialog-body">
-                            <form>
+                            <form class="form-horizontal">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Save as:</label>
-                                    <input type="text" class="form-control" id="save-file-dialog-filename" placeholder="Enter file name with no spaces or underscores">
+                                    <label for="save-file-dialog-filename" class="control-label">Save as:</label>
+                                    <input type="text" class="form-control" id="save-file-dialog-filename" placeholder="Enter file name with no spaces or underscores ...">
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn-md btn-default" data-dismiss="modal">Cancel</button>
                             <button type="button" class="btn-md btn-primary" id="modal-save-button">Save</button>
+                        </div>
+                    </div> <!-- /.modal-content -->
+                </div> <!-- /.modal-dialog -->
+            </div> <!-- /.modal -->
+
+            <!-- Modals for Google Drive authorization inputs from the user -->
+            <div class="modal fade" id="auth-gdrive-file-dialog" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Google Drive API Authorization</h4>
+                        </div>
+                        <div class="modal-body auth-gdrive-file-dialog-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <div id="authorization-url-div"> Authorize this app by visiting this url: <a id="authorization-url-anchor" href="">AuthURL</a></div>
+                                    <label for="auth-gdrive-file-dialog-code" class="control-label">Enter the code from that page here: </label>
+                                    <input type="text" class="form-control" id="auth-gdrive-file-dialog-code" placeholder="Enter code here ...">
+                                    <div id="auth-error-message"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-md btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn-md btn-primary" id="modal-gdrive-auth-done-button">Done</button>
                         </div>
                     </div> <!-- /.modal-content -->
                 </div> <!-- /.modal-dialog -->

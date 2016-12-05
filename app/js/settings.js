@@ -15,6 +15,7 @@ function getSettings() {
         return jsonfile.readFileSync(settingsFile);
     }
     catch(err) {
+        dialog.showErrorBox("Error while reading from settings file: ", err.message);
         return console.error("Error while reading from settings file: " + err);
     }
 }
@@ -30,6 +31,7 @@ function getSettings() {
 function getSetting(settingKey) {
     var appSettings = getSettings();
     if(appSettings[settingKey] === undefined) {
+        dialog.showErrorBox("Error while trying to fetch a setting: ", err.message);
         return console.error("Error while trying to fetch a setting");
     }
     return appSettings[settingKey];

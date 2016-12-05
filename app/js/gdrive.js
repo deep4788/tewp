@@ -1,40 +1,48 @@
-const {dialog} = require("electron").remote;
 var fs = require("fs");
 var readline = require("readline");
+
+const {dialog} = require("electron").remote;
 var google = require("googleapis");
 var googleAuth = require("google-auth-library");
 
-/*********************/
-/* Private Functions */
-/*********************/
-var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
-
+/*********************************/
+/* Private functions and objects */
+/*********************************/
 //If modifying these scopes, delete previously saved credentials at ~/.credentials/google-drive-nodejs-tewp-project.json
 var SCOPES = [
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/drive.file"
 ];
+var clientSecretFileLocation = require("electron").remote.getGlobal("sharedClientSecretFileLocationObject").clientSecretFileLocation;
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE) + "/.credentials/";
 var TOKEN_PATH = TOKEN_DIR + "google-drive-nodejs-tewp-project.json";
+var oauth2Client;
+
+//Bootstrap modal options
+var modalOptions = {
+    "backdrop": "static",
+    "keyboard": "true"
+}
 
 /**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
+ * @brief Create an OAuth2 client with the given credentials, and then
+ *  execute the given callback function.
  *
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
+ * @param credentials The authorization client credentials
+ * @param fileDataObj The file object containing file's metadata
+ * @param callback The callback to call with the authorized client
  */
 function authorize(credentials, fileDataObj, callback) {
     var clientSecret = credentials.installed.client_secret;
     var clientId = credentials.installed.client_id;
     var redirectUrl = credentials.installed.redirect_uris[0];
     var auth = new googleAuth();
-    var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-    //Check if we have previously stored a token.
+    //Check if we have previously stored a token
     fs.readFile(TOKEN_PATH, function(err, token) {
         if(err) {
-            getNewToken(oauth2Client, callback);
+            getNewToken(oauth2Client);
         }
         else {
             oauth2Client.credentials = JSON.parse(token);
@@ -44,52 +52,21 @@ function authorize(credentials, fileDataObj, callback) {
 }
 
 /**
- * Get and store new token after prompting for user authorization, and then
- * execute the given callback with the authorized OAuth2 client.
+ * @brief Get token after prompting dialog for user authorization
  *
- * @param {google.auth.OAuth2} oauth2Client The OAuth2 client to get token for.
- * @param {getEventsCallback} callback The callback to call with the authorized
- *  client.
+ * @param oauth2Client The OAuth2 client to get token for
  */
-function getNewToken(oauth2Client, callback) {
+function getNewToken(oauth2Client) {
     var authUrl = oauth2Client.generateAuthUrl({
         access_type: "offline",
         scope: SCOPES
     });
-    console.log("Authorize this app by visiting this url: ", authUrl);
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    rl.question("Enter the code from that page here: ", function(code) {
-        rl.close();
-        oauth2Client.getToken(code, function(err, token) {
-            if(err) {
-                return console.error("Error while trying to retrieve access token", err);
-            }
-            oauth2Client.credentials = token;
-            storeToken(token);
-            callback(oauth2Client);
-        });
-    });
-}
 
-/**
- * Store token to disk be used in later program executions.
- *
- * @param {Object} token The token to store to disk.
- */
-function storeToken(token) {
-    try {
-        fs.mkdirSync(TOKEN_DIR);
-    }
-    catch(err) {
-        if(err.code !== "EEXIST") {
-            throw err;
-        }
-    }
-    fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-    console.log("Token stored to " + TOKEN_PATH);
+    //Add the returned authorization url to the modal dialog
+    $("#authorization-url-anchor").attr("href", authUrl)
+
+    //Pop-up the modal dialog to ask for user input for authorizing Google Drive API
+    $("#auth-gdrive-file-dialog").modal(modalOptions);
 }
 
 /**
@@ -104,8 +81,9 @@ function getGdriveFileData(auth, fileDataObj) {
     service.files.export({
         auth: auth,
         fileId: fileId,
-        mimeType: 'text/plain' }, function(err, response) {
+        mimeType: "text/plain" }, function(err, response) {
         if(err) {
+            dialog.showErrorBox("Google Drive returned an error: ", err.message);
             return console.error("The API returned an error: " + err);
         }
 
@@ -129,6 +107,7 @@ function listGdriveFiles(auth, _) {
         q: "name contains 'tewpbydeep_'",
         fields: "files(id, name)" }, function(err, response) {
         if(err) {
+            dialog.showErrorBox("Google Drive returned an error: ", err.message);
             return console.error("The API returned an error: " + err);
         }
         var files = response.files;
@@ -137,22 +116,18 @@ function listGdriveFiles(auth, _) {
         }
         else {
             //Clear the list and then re-populate it
-            $('#select-google-drive-file').empty();
+            $("#select-google-drive-file").empty();
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
                 var fileName = file.name.split("_")[1];
-                $('#select-google-drive-file').append($('<option>', {
+                $("#select-google-drive-file").append($("<option>", {
                     value: file.id,
                     text : fileName
                 }));
             }
-            var modalOptions = {
-                "backdrop": "static",
-                "keyboard": "true"
-            }
 
             //Once the files options elements are added to the select element, open the modal dialog
-            $('#open-file-dialog').modal(modalOptions);
+            $("#open-file-dialog").modal(modalOptions);
         }
     });
 }
@@ -180,7 +155,8 @@ function createGdriveFile(auth, fileDataObj) {
         media: media,
         fields: "id, name" }, function(err, file) {
         if(err) {
-            console.error(err);
+            dialog.showErrorBox("Google Drive returned an error: ", err.message);
+            return console.error(err);
         }
         else {
             //Show dialog message for confirmation
@@ -216,6 +192,7 @@ function updateGdriveFile(auth, fileDataObj) {
         media: media,
         fields: "id, name" }, function(err, file) {
         if(err) {
+            dialog.showErrorBox("Google Drive returned an error: ", err.message);
             return console.error(err);
         }
         else {
@@ -231,6 +208,43 @@ function updateGdriveFile(auth, fileDataObj) {
 /* Public Function */
 /*******************/
 /**
+ * @brief Store token to disk be used in later program executions.
+ */
+function storeToken() {
+    var code = $("#auth-gdrive-file-dialog-code").val();
+    if(code === "") {
+        $("#auth-gdrive-file-dialog-code").css("border", "2px solid red");
+        $("#auth-error-message").text("Required field.").show();
+        return;
+    }
+
+    //Get new token and store it
+    oauth2Client.getToken(code, function(err, token) {
+        if(err) {
+            $("#auth-gdrive-file-dialog-code").val("").focus();
+            $("#auth-error-message").text("Error while trying to retrieve access token. Please enter correct code.").show();
+            return console.error("Error while trying to retrieve access token", err);
+        }
+        oauth2Client.credentials = token;
+
+        //Hide the modal dialog
+        $("#auth-gdrive-file-dialog").modal("hide");
+
+        //Store the token
+        try {
+            fs.mkdirSync(TOKEN_DIR);
+        }
+        catch(err) {
+            if(err.code !== "EEXIST") {
+                throw err;
+            }
+        }
+        fs.writeFile(TOKEN_PATH, JSON.stringify(token));
+        dialog.showMessageBox({ type: "info", message: "Authorization token stored to " + TOKEN_PATH + ". You can now use Google Drive services", buttons: ["OK"] });
+    });
+}
+
+/**
  * @brief External function to help communicate with this module
  *
  * @param methodName Internal function to be called using this method name
@@ -239,6 +253,7 @@ function updateGdriveFile(auth, fileDataObj) {
 function communicateToGoogleDrive(methodName, fileDataObj) {
     fs.readFile(clientSecretFileLocation, function processClientSecrets(err, content) {
         if(err) {
+            dialog.showErrorBox("Error loading client's secret file: ", err.message);
             return console.error("Error loading client secret file: " + err);
         }
 
@@ -260,5 +275,6 @@ function communicateToGoogleDrive(methodName, fileDataObj) {
 
 //Export the public functions
 module.exports = {
-    communicateToGoogleDrive,
+    storeToken,
+    communicateToGoogleDrive
 }

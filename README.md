@@ -1,25 +1,33 @@
 # tewp: Text Editor with Powers
 
-`tewp`: A unique text editor with magical powers written using Electron <http://electron.atom.io/>.
+`tewp`: A unique text editor with magical powers written using Electron and <http://electron.atom.io/>.
+
+![screenshot](resources/images//appImage.png)
 
 #### Features
-TODO finish this section
-- Themes
-- Mode: local and Google drive (Google Docs)
-- number of words
-- save settings: last file opened, theme selection, mode etc
+- **Themes**
+    - Provides several themes to chose from
+- **Mode**
+    - Provides two modes: *local* and *gdocs*
+    - *local* mode deals with opening and saving files from/to local machine
+    - *gdocs* mode deasl with opening and saving files from/to Google Drive (Yes, I know this is awesome!)
+- **Word Count**
+    - Displays total number of words in a document at the bottom of the editor
+- **LSS**
+    - Uploads last saved settings (LSS) which includes: last opened file, theme and mode
+- **Keyboard Shortcuts**
+    - TODO
 
 Installation
 ------------
+Read section **Create and Activate the Google Drive API** and then run these commands:
+
 ```sh
 # Install dependencies
 $ npm install
 
-# Run the app using npm
-$ npm start
-
-# Run the app using electron
-$ electron .
+# Install Tewp package
+$ npm run package-osx
 ```
 
 Create and Activate the Google Drive API
@@ -39,10 +47,14 @@ Step 1: Turn on the Drive API
 
 Source: https://developers.google.com/drive/v3/web/quickstart/nodejs
 
+Future Improvements / New Features
+----------------------------------
+#### New Features
+- Delete file from Google Drive
 
-Screenshot
-----------
-![](static/images/appImage.png)
+#### Future Improvements
+- Fix the newline issue TODO finish this line
+- Unsaved changes in a pre-existing file; a dialog to confirm cancel or save
 
 Author
 ------

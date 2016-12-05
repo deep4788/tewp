@@ -1,5 +1,6 @@
-const {dialog} = require("electron").remote;
 const fs = require("fs");
+
+const {dialog} = require("electron").remote;
 const gdriveapi = require("./gdrive");
 const appsettings = require("./settings");
 
@@ -10,7 +11,7 @@ const appsettings = require("./settings");
 function readFileContentsIntoEditor(filename) {
     fs.readFile(filename, function(err, data) {
         if(err) {
-            dialog.showErrorBox("File Save Error", err.message);
+            dialog.showErrorBox("File Save Error: ", err.message);
             return console.error("Error while reading file \"" + filename + "\": " + err);
         }
         editor.setValue(data.toString());
@@ -21,7 +22,7 @@ function readFileContentsIntoEditor(filename) {
 function writeEditorContentsToFile(filename) {
     fs.writeFile(filename, editor.getValue(), function(err) {
         if(err) {
-            dialog.showErrorBox("File Write Error", err.message);
+            dialog.showErrorBox("File Write Error: ", err.message);
             return console.error("Error while writing to file \"" + filename + "\": " + err);
         }
     });
@@ -188,7 +189,6 @@ var saveFile = function saveFile() {
 
                 //Show message to the user that the file has been saved
                 dialog.showMessageBox({ message: "The file has been saved! :)", buttons: ["OK"] });
-                //TODO: Add custom icon to this using options: https://github.com/electron/electron/blob/master/docs/api/dialog.md
             }
             //Enable all the buttons
             enableAllButtons();

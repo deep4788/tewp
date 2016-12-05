@@ -9,7 +9,6 @@ const url = require("url");
 const electron = require("electron");
 const app = electron.app;  //Module to control application life
 const BrowserWindow = electron.BrowserWindow;  //Module to create native browser window
-//const Tray = electron.Tray;  //Module to add icons and context menus to the system"s notification area TODO
 
 //Load other necessary modules
 const jsonfile = require("jsonfile")
@@ -29,6 +28,7 @@ jsonfile.readFile(settingsFile, function(err, obj) {
         };
         jsonfile.writeFile(settingsFile, settingsJson, function(err) {
             if(err) {
+                electron.dialog.showErrorBox("Couldn't write to settings file: ", err.message);
                 console.error("Error while writing to settings file: " + err);
                 process.exit();
             }
@@ -36,30 +36,26 @@ jsonfile.readFile(settingsFile, function(err, obj) {
     }
 });
 
-//TODO make all single quotes in all files to double quotes
-
 //Save the client't secret file (with Google Drive credentials) to application data directory
-try {
-    fs.existsSync(app.getPath("userData")+"/client_secret.json");
-}
-catch(err) {
+var clientSecretFilePath = app.getPath("userData")+"/client_secret.json";
+var clientSecretFileExist = fs.existsSync(clientSecretFilePath);
+if(clientSecretFileExist === false) {
     try {
-        fs.renameSync(app.getAppPath()+"/client_secret.json", app.getPath("userData")+"/client_secret.json");
+        fs.renameSync(app.getAppPath()+"/client_secret.json", clientSecretFilePath);
     }
     catch(err) {
+        electron.dialog.showErrorBox("Couldn't move the client_secret.json file: ", err.message);
         console.error(err);
         process.exit();
     }
 }
-global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: app.getPath("userData")+"/client_secret.json" };
+global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: clientSecretFilePath };
 
 //Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected
 let mainWindow;
 
 function createWindow() {
-    //const appIcon = new Tray("./icon256.png") TODO add app icon
-
     //Create the browser window
     mainWindow = new BrowserWindow({
         width: 800,
