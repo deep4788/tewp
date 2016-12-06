@@ -30,7 +30,12 @@ $ npm install
 
 # Install Tewp
 $ npm run package-osx
+
+# Copy the Tewp.app directory to Applications
+$ cp -r .../Inbox.app /Applications TODO
 ```
+
+NOTE: Tewp.app is only tested on MacOS.
 
 Create and Activate the Google Drive API
 ----------------------------------------
@@ -60,6 +65,7 @@ Future Improvements / New Features
 #### New Features
 - Delete file from Google Drive
 - A dialog to confirm (cancel or save) unsaved changes for new content on the editor
+- Enter key directly clicks on the Save or Open buttons in the modal dialog
 
 #### Future Improvements
 - Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor

@@ -1,10 +1,12 @@
 {
   "name": "tewp",
+  "productName": "Tewp",
   "version": "1.0.0",
   "description": "A unique text editor with magical powers written using Electron",
   "author": "Deep Aggarwal <deep.uiuc@gmail.com>",
   "main": "app",
   "scripts": {
+    "package-osx": "electron-packager . --out=dist --overwrite --platform=darwin --arch=x64 --icon=resources/app-icons/stable/tewp.icns && cp -r dist/Tewp-darwin-x64/Tewp.app /Applications",
     "start": "electron app"
   },
   "repository": {
@@ -23,6 +25,7 @@
   ],
   "dependencies": {
     "electron": "^1.4.1",
+    "electron-packager": "8.3.0",
     "google-auth-library": "0.9.10",
     "googleapis": "14.2.0",
     "jsonfile": "2.4.0"
