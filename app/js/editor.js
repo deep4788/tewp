@@ -20,7 +20,9 @@ function main() {
 
     //Create a CodeMirror editor instance for the div element "editor"
     editor = CodeMirror($("#editor")[0], {
+            indentUnit: 0,
             lineNumbers: true,
+            lineWrapping: true,
             theme: appsettings.getSetting("theme"),
             autofocus: true,
             viewportMargin: Infinity,

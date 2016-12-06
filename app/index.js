@@ -13,6 +13,9 @@ const BrowserWindow = electron.BrowserWindow;  //Module to create native browser
 //Load other necessary modules
 const jsonfile = require("jsonfile")
 
+//Load custom modules
+var menu = require("./js/menu").menu;
+
 //Configure default settings for the app and save the settings
 var settingsFile = app.getPath("userData") + "/settings.json";
 global.sharedSettingObj = { settingsFile: settingsFile };
@@ -83,6 +86,9 @@ function createWindow() {
         // when you should delete the corresponding element
         mainWindow = null;
     });
+
+    //Create application menu
+    menu();
 }
 
 //This method will be called when Electron has finished

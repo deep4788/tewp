@@ -1,10 +1,12 @@
-# tewp: Text Editor with Powers
+# Tewp: Text Editor with Powers
 
-`tewp`: A unique text editor with magical powers written using Electron and <http://electron.atom.io/>.
+`Tewp`: A unique text editor with magical powers written using Electron and <http://electron.atom.io/>.
 
-![screenshot](resources/images//appImage.png)
+<p align="center">
+    <img src="resources/images/appImageSmall.png">
+</p>
 
-#### Features
+### Features
 - **Themes**
     - Provides several themes to chose from
 - **Modes**
@@ -16,9 +18,20 @@
 - **Last Saved Settings**
     - Uploads last saved settings --- *last opened file, theme and mode* --- whenever you open the editor
 - **Keyboard Shortcuts**
-    - `Cmd-N/Ctrl-N`: Create a new file
-    - `Cmd-O/Ctrl-O`: Open a file
-    - `Cmd-S/Ctrl-S`: Save a file
+    - `Cmd+N/Ctrl+N`: Create a new file
+    - `Cmd+O/Ctrl+O`: Open a file
+    - `Cmd+S/Ctrl+S`: Save a file
+- **Application Menu Bar**
+    - Common menu bar features/shortcuts are also provided
+
+        Task | Command
+        --- | ---
+        Quit | `Cmd+Q`
+        Undo/Redo | `CmdOrCtrl+Z`/`Shift+CmdOrCtrl+Z`
+        Cut/Copy/Paste Text | `CmdOrCtrl+X`/`CmdOrCtrl+C`/`CmdOrCtrl+V`
+        Select All | `CmdOrCtrl+A`
+        Toggle Developer Tools | `Alt+Command+I`
+        Window | `CmdOrCtrl+M` (minimize)
 
 Installation
 ------------
@@ -28,11 +41,8 @@ Read section **Create and Activate the Google Drive API** and then run these com
 # Install dependencies
 $ npm install
 
-# Install Tewp
+# Install Tewp in the /Applications directory
 $ npm run package-osx
-
-# Copy the Tewp.app directory to Applications
-$ cp -r .../Inbox.app /Applications TODO
 ```
 
 NOTE: Tewp.app is only tested on MacOS.
@@ -65,7 +75,7 @@ Future Improvements / New Features
 #### New Features
 - Delete file from Google Drive
 - A dialog to confirm (cancel or save) unsaved changes for new content on the editor
-- Enter key directly clicks on the Save or Open buttons in the modal dialog
+- Pressing Enter key should directly click on the Save or Open button in the modal dialog
 
 #### Future Improvements
 - Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor

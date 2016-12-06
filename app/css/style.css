@@ -7,29 +7,37 @@
     padding: 0px;
 }
 
-/* Overwriting Bootstrap's col-md-12 padding */
-.col-md-12 {
+/* Overwriting Bootstrap's .row, col-md-6 and col-md-12 classes's padding and margin */
+.col-md-12, .col-md-6, .col-md-4 {
+    padding-left: 0px;
     padding-right: 0px;
 }
 
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 /* Top and bottom bars */
-.top-bar {
+.top-bar, .bottom-bar {
     background-color: #696969;
+}
+
+.top-bar {
     font-family: Copperplate, "Copperplate Gothic Light", fantasy;
 }
 
 .bottom-bar {
-    background-color: #696969;
     font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     font-size: 14px;
 }
 
 .file-info {
-    margin-left: 10px; 
+    margin-left: 10px;
 }
 
 .curr-date {
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
 /* Overwriting the height setting of CodeMirror class */
@@ -67,6 +75,7 @@
 .btn-md {
     border-radius: 5px;
     cursor: pointer;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
 }
 
 .btn-md:hover, .btn-md:active {
