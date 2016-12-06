@@ -7,9 +7,34 @@
     padding: 0px;
 }
 
+/* Overwriting Bootstrap's col-md-12 padding */
+.col-md-12 {
+    padding-right: 0px;
+}
+
+/* Top and bottom bars */
+.top-bar {
+    background-color: #696969;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+
+.bottom-bar {
+    background-color: #696969;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 14px;
+}
+
+.file-info {
+    margin-left: 10px; 
+}
+
+.curr-date {
+    margin-right: 10px; 
+}
+
 /* Overwriting the height setting of CodeMirror class */
 .CodeMirror {
-    height: 521px;
+    height: 524px;
 }
 
 /* Themes dropdown styling */
@@ -29,10 +54,29 @@
 
 #themelist .disabled {
     font-style: italic;
-    background-color: red; /* TODO change this */
+    background-color: #C0C0C0;
 }
 
+/* Error message */
 #auth-error-message {
     display: none;
     color: red;
+}
+
+/* Buttons */
+.btn-md {
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-md:hover, .btn-md:active {
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Modal dialog for authorization */
+#authorization-url-div {
+    margin-bottom: 10px;
+    font-weight: bold;
 }

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="description" content="A unique text editor with magical powers written using Electron">
         <meta name="author" content="Deep Aggarwal">
-        <title>tewp</title>
+        <title>Tewp</title>
 
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/lib/codemirror.css">
         <link rel="stylesheet" href="./lib/codemirror-5.20.2/theme/ambiance.css">
@@ -29,20 +29,21 @@
         <link rel="stylesheet" href="./css/thirdparty/normalize.css"/>
         <link rel="stylesheet" href="./css/thirdparty/bootstrap.min.css"/>
         <link rel="stylesheet" href="./css/thirdparty/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Pacifico">
         <link rel="stylesheet" href="./css/style.css"/>
     </head>
     <body>
         <div class="container">
-            <div class="row">
+            <div class="row top-bar">
                 <div class="col-md-6 pull-left">
-                    <button type="button" class="btn-md btn-default new-file"><i class="fa fa-file-text-o" aria-hidden="true"></i> New</button>
-                    <button type="button" class="btn-md btn-default open-file"><i class="fa fa-folder-open" aria-hidden="true"></i> Open</button>
-                    <button type="button" class="btn-md btn-default save-file"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+                    <button type="button" class="btn-md btn-primary new-file"><i class="fa fa-file-text-o" aria-hidden="true"></i> New</button>
+                    <button type="button" class="btn-md btn-primary open-file"><i class="fa fa-folder-open" aria-hidden="true"></i> Open</button>
+                    <button type="button" class="btn-md btn-primary save-file"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
                 </div>
                 <div class="col-md-6 pull-right">
-                    <button type="button" class="btn-md btn-default select-mode"><i class="fa fa-cog" aria-hidden="true"></i> Mode: <span id="current-editor-mode"></span></button>
+                    <button type="button" class="btn-md btn-success select-mode"><i class="fa fa-cog" aria-hidden="true"></i> Mode: <span id="current-editor-mode"></span></button>
                     <div class="dropdown">
-                        <button class="btn-md btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button class="btn-md btn-success dropdown-toggle" type="button" data-toggle="dropdown">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                             Themes
                             <span class="caret"></span>
@@ -77,17 +78,17 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row bottom-bar">
                 <div class="col-md-6 pull-left">
                     <div class="file-info">
-                        <label>Filename: </label><span id="opened-file-name"></span>
-                        <label>Words: </label><span id="words-length">0</span>
+                        <label>Filename:&nbsp</label><span id="opened-file-name"></span>
+                        <label>Words:&nbsp</label><span id="words-length">0</span>
                         <!--<label>Characters: </label><span id="characters-length">0</span>-->
                     </div>
                 </div>
                 <div class="col-md-6 pull-right">
                     <div class="curr-date">
-                        <label>Date: </label><span id="date-string"></span>
+                        <label>Date:&nbsp</label><span id="date-string"></span>
                     </div>
                 </div>
             </div>
@@ -120,7 +121,8 @@
                             <h4 class="modal-title">Save file to Google Drive</h4>
                         </div>
                         <div class="modal-body save-file-dialog-body">
-                            <form class="form-horizontal">
+                            <!--<form class="form-horizontal"> XXX -->
+                            <form>
                                 <div class="form-group">
                                     <label for="save-file-dialog-filename" class="control-label">Save as:</label>
                                     <input type="text" class="form-control" id="save-file-dialog-filename" placeholder="Enter file name with no spaces or underscores ...">
@@ -143,10 +145,11 @@
                             <h4 class="modal-title">Google Drive API Authorization</h4>
                         </div>
                         <div class="modal-body auth-gdrive-file-dialog-body">
-                            <form class="form-horizontal">
+                            <!--<form class="form-horizontal"> XXX -->
+                            <form>
                                 <div class="form-group">
-                                    <div id="authorization-url-div"> Authorize this app by visiting this url: <a id="authorization-url-anchor" href="">AuthURL</a></div>
-                                    <label for="auth-gdrive-file-dialog-code" class="control-label">Enter the code from that page here: </label>
+                                    <div id="authorization-url-div">1. Authorize this app by visiting this url: <a id="authorization-url-anchor" href="">AuthURL</a></div>
+                                    <label for="auth-gdrive-file-dialog-code" class="control-label">2. Enter the code from that page here: </label>
                                     <input type="text" class="form-control" id="auth-gdrive-file-dialog-code" placeholder="Enter code here ...">
                                     <div id="auth-error-message"></div>
                                 </div>

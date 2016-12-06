@@ -62,7 +62,7 @@ function createWindow() {
         height: 600,
         resizable: false,
         maximizable: false,
-        title: "tewp",
+        title: "Tewp",
         backgroundColor: "#3b3a36"
     });
 
