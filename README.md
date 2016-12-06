@@ -13,10 +13,12 @@
     - *gdocs* mode deasl with opening and saving files from/to Google Drive (Yes, I know this is awesome!)
 - **Word Count**
     - Displays total number of words in a document at the bottom of the editor
-- **LSS**
-    - Uploads last saved settings (LSS) which includes: last opened file, theme and mode
+- **Last Saved Settings**
+    - Uploads last saved settings --- *last opened file, theme and mode* --- whenever you open the editor
 - **Keyboard Shortcuts**
-    - TODO
+    - `Cmd-N/Ctrl-N`: Create a new file
+    - `Cmd-O/Ctrl-O`: Open a file
+    - `Cmd-S/Ctrl-S`: Save a file
 
 Installation
 ------------

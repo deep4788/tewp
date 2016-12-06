@@ -228,6 +228,9 @@ function setGoogleDriveFileDataToEditor() {
     //Update the settings
     appsettings.setSetting("filename", nameOfSelectedFile);
     appsettings.setSetting("fileid", idOfSelectedFile);
+
+    //Put focus back on the editor
+    editor.focus();
 }
 
 function saveDataToGoogleDrive() {
@@ -240,6 +243,9 @@ function saveDataToGoogleDrive() {
 
     //Update the editor opened file name label
     $("#opened-file-name").text(filename);
+
+    //Put focus back on the editor
+    editor.focus();
 }
 
 //Export the public functions

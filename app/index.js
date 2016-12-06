@@ -74,7 +74,7 @@ function createWindow() {
     }));
 
     //Open the DevTools, NOTE: this is only for development purpose
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     //Emitted when the window is closed
     mainWindow.on("closed", function() {

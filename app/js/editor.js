@@ -23,7 +23,15 @@ function main() {
             lineNumbers: true,
             theme: appsettings.getSetting("theme"),
             autofocus: true,
-            viewportMargin: Infinity
+            viewportMargin: Infinity,
+            extraKeys: {
+                "Cmd-N": function() { controller.createNewFile() },
+                "Ctrl-N": function() { controller.createNewFile() },
+                "Cmd-O": function() { controller.openFile() },
+                "Ctrl-O": function() { controller.openFile() },
+                "Cmd-S": function() { controller.saveFile() },
+                "Ctrl-S": function() { controller.saveFile() }
+            }
     });
 
     //Create an event handler for changing theme
