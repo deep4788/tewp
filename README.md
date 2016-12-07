@@ -35,17 +35,18 @@
 
 Installation
 ------------
-Read section **Create and Activate the Google Drive API** and then run these commands:
+1. Install Node.js: <https://nodejs.org/en/>
+2. Read section **Create and Activate the Google Drive API** and then run these commands:
 
-```sh
-# Install dependencies
-$ npm install
+    ```sh
+    # Install dependencies
+    $ npm install
 
-# Install Tewp in the /Applications directory
-$ npm run package-osx
-```
+    # Install Tewp (it will be installed in the /Applications directory where all your apps live)
+    $ npm run package-osx
+    ```
 
-NOTE: Tewp.app is only tested on MacOS.
+NOTE: Tewp.app is only tested on Mac OSX.
 
 Create and Activate the Google Drive API
 ----------------------------------------
