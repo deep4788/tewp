@@ -16,11 +16,16 @@ const jsonfile = require("jsonfile")
 //Load custom modules
 var menu = require("./js/menu").menu;
 
-//Configure default settings for the app and save the settings
-var settingsFile = app.getPath("userData") + "/settings.json";
-global.sharedSettingObj = { settingsFile: settingsFile };
-jsonfile.readFile(settingsFile, function(err, obj) {
-    if(err) {
+//Performs app's initialization tasks: settings file and client_secret
+//  file Google Drive API authorization
+function appDataAndSettingsSetup() {
+    //Configure default settings for the app and save the settings
+    var settingsFile = app.getPath("userData") + "/settings.json";
+    global.sharedSettingObj = { settingsFile: settingsFile };
+    try {
+        jsonfile.readFileSync(settingsFile);
+    }
+    catch(err) {
         //Settings file does not exist, so create it
         var settingsJson = {
             theme: "ambiance",
@@ -29,30 +34,26 @@ jsonfile.readFile(settingsFile, function(err, obj) {
             filename: "[ No File ]",
             filelocation: ""
         };
-        jsonfile.writeFile(settingsFile, settingsJson, function(err) {
-            if(err) {
-                electron.dialog.showErrorBox("Couldn't write to settings file: ", err.message);
-                console.error("Error while writing to settings file: " + err);
-                process.exit();
-            }
-        });
+        console.log("check1");
+        jsonfile.writeFileSync(settingsFile, settingsJson);
+        console.log("check2");
     }
-});
 
-//Save the client't secret file (with Google Drive credentials) to application data directory
-var clientSecretFilePath = app.getPath("userData")+"/client_secret.json";
-var clientSecretFileExist = fs.existsSync(clientSecretFilePath);
-if(clientSecretFileExist === false) {
-    try {
-        fs.renameSync(app.getAppPath()+"/client_secret.json", clientSecretFilePath);
+    //Save the client't secret file (with Google Drive credentials) to application data directory
+    var clientSecretFilePath = app.getPath("userData")+"/client_secret.json";
+    var clientSecretFileExist = fs.existsSync(clientSecretFilePath);
+    if(clientSecretFileExist === false) {
+        try {
+            fs.renameSync(app.getAppPath()+"/client_secret.json", clientSecretFilePath);
+        }
+        catch(err) {
+            electron.dialog.showErrorBox("Couldn't move the client_secret.json file: ", err.message);
+            console.error(err);
+            process.exit();
+        }
     }
-    catch(err) {
-        electron.dialog.showErrorBox("Couldn't move the client_secret.json file: ", err.message);
-        console.error(err);
-        process.exit();
-    }
+    global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: clientSecretFilePath };
 }
-global.sharedClientSecretFileLocationObject = { clientSecretFileLocation: clientSecretFilePath };
 
 //Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected
@@ -68,6 +69,9 @@ function createWindow() {
         title: "Tewp",
         backgroundColor: "#3b3a36"
     });
+
+    //Setup app's data directory and perform other initialization tasks
+    appDataAndSettingsSetup();
 
     //Load the index.html of the app
     mainWindow.loadURL(url.format({
