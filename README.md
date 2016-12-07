@@ -81,6 +81,7 @@ Future Improvements / New Features
 #### Future Improvements
 - Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor
 - Some code refactoring can be done
+- When a file is created or saved, the confirmation can be shown in the bottom footer instead of a pop-up dialog
 
 Author
 ------
