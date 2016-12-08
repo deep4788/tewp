@@ -73,6 +73,12 @@
     margin-top: 5px;
 }
 
+/* Confirmation message */
+.confirmation-message {
+    font-weight: bold;
+    font-size: 15px;
+}
+
 /* Buttons */
 .btn-md {
     border-radius: 5px;

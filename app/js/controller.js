@@ -188,7 +188,8 @@ var saveFile = function saveFile() {
                 appsettings.setSetting("filelocation", filename);
 
                 //Show message to the user that the file has been saved
-                dialog.showMessageBox({ message: "The file has been saved! :)", buttons: ["OK"] });
+                $(".confirmation-message").text("The file has been saved! :)");
+                $("#confirmation-dialog").modal(modalOptions);
             }
             //Enable all the buttons
             enableAllButtons();
