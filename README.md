@@ -71,16 +71,16 @@ Follow these steps to turn on the Google Drive API and download your **client_se
 
 Source: <https://developers.google.com/drive/v3/web/quickstart/nodejs>
 
-Future Improvements / New Features
-----------------------------------
-#### New Features
-- Delete file from Google Drive
+Future Improvements / New Features / Issues
+-------------------------------------------
+#### New Features (Future Improvements)
+- Delete button to perform file deletion from Google Drive
 - A dialog to confirm (cancel or save) unsaved changes for new content on the editor
-
-#### Future Improvements
-- Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor
-- Some code refactoring can be done
 - When a file is created or saved, the confirmation can be shown in the bottom footer instead of a pop-up dialog
+- Some code refactoring can be done
+
+#### Issues
+- Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor
 
 Author
 ------
