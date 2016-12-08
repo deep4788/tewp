@@ -201,6 +201,9 @@ var saveFile = function saveFile() {
                 "backdrop": "static",
                 "keyboard": "true"
             }
+            $("#save-file-dialog-filename").css("border", "");
+            $("#save-file-dialog-filename").val("");
+            $(".error-message").hide();
             $("#save-file-dialog").modal(modalOptions);
         }
         else {
@@ -217,6 +220,12 @@ function setGoogleDriveFileDataToEditor() {
     //Get the name and id of the file user has selected
     var nameOfSelectedFile = $("#select-google-drive-file :selected").text();
     var idOfSelectedFile = $("#select-google-drive-file :selected").attr("value");
+
+    //Validate a file is selected by the user
+    if(nameOfSelectedFile === "" || idOfSelectedFile === "") {
+        $(".error-message").text("You need to select a file.").show();
+        return;
+    }
 
     //Talk to Google Drive module and update the editor
     gdriveapi.communicateToGoogleDrive("getfiledata", { "fileid": idOfSelectedFile, "filename": "" });
@@ -236,6 +245,13 @@ function setGoogleDriveFileDataToEditor() {
 function saveDataToGoogleDrive() {
     //Get the filename entered
     var filename = $("#save-file-dialog-filename").val();
+
+    //Validate that the filename should not be empty
+    if(filename === "") {
+        $("#save-file-dialog-filename").css("border", "2px solid red");
+        $(".error-message").text("Required field.").show();
+        return;
+    }
 
     //Talk to Google Drive module and create the file
     gdriveapi.communicateToGoogleDrive("createnewfile", { "fileid": "", "filename": filename } );

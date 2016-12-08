@@ -127,6 +127,7 @@ function listGdriveFiles(auth, _) {
             }
 
             //Once the files options elements are added to the select element, open the modal dialog
+            $(".error-message").hide();
             $("#open-file-dialog").modal(modalOptions);
         }
     });
@@ -214,7 +215,7 @@ function storeToken() {
     var code = $("#auth-gdrive-file-dialog-code").val();
     if(code === "") {
         $("#auth-gdrive-file-dialog-code").css("border", "2px solid red");
-        $("#auth-error-message").text("Required field.").show();
+        $(".error-message").text("Required field.").show();
         return;
     }
 
@@ -222,7 +223,7 @@ function storeToken() {
     oauth2Client.getToken(code, function(err, token) {
         if(err) {
             $("#auth-gdrive-file-dialog-code").val("").focus();
-            $("#auth-error-message").text("Error while trying to retrieve access token. Please enter correct code.").show();
+            $(".error-message").text("Error while trying to retrieve access token. Please enter correct code.").show();
             return console.error("Error while trying to retrieve access token", err);
         }
         oauth2Client.credentials = token;

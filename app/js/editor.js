@@ -63,6 +63,28 @@ function main() {
         shell.openExternal(this.href);
     });
 
+    //Attach Enter key to modals for opening and saving a file and also
+    //to the done button for Google Drive authorization; enter key
+    //  will click open/save/done button on the modal
+    $("#open-file-dialog, #save-file-dialog, #auth-gdrive-file-dialog").keypress(function(e) {
+        if(e.which === 13) {
+            //Prevent default action of closing the form dialog when enter is pressed
+            e.preventDefault();
+
+            //Check which modal (open/save/google-authorization) is in focus and take appropriate action
+            var elemId = e.target.id;
+            if(elemId === "open-file-dialog" || elemId === "select-google-drive-file") {
+                controller.setGoogleDriveFileDataToEditor();
+            }
+            else if(elemId === "save-file-dialog" || elemId === "save-file-dialog-filename") {
+                controller.saveDataToGoogleDrive();
+            }
+            else if(elemId === "auth-gdrive-file-dialog" || elemId === "auth-gdrive-file-dialog-code") {
+                gdriveapi.storeToken();
+            }
+        }
+    });
+
     //Put focus on the editor
     editor.focus();
 }

@@ -66,9 +66,11 @@
 }
 
 /* Error message */
-#auth-error-message {
+.error-message {
     display: none;
     color: red;
+    font-style: italic;
+    margin-top: 5px;
 }
 
 /* Buttons */

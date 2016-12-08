@@ -104,6 +104,7 @@
                             <label for="select-google-drive-file">Select a file</label>
                             <select class="form-control" id="select-google-drive-file" size="5">
                             </select>
+                            <div class="error-message"></div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn-md btn-default" data-dismiss="modal">Cancel</button>
@@ -125,6 +126,7 @@
                                 <div class="form-group">
                                     <label for="save-file-dialog-filename" class="control-label">Save as:</label>
                                     <input type="text" class="form-control" id="save-file-dialog-filename" placeholder="Enter file name with no spaces or underscores ...">
+                                    <div class="error-message"></div>
                                 </div>
                             </form>
                         </div>
@@ -149,7 +151,7 @@
                                     <div id="authorization-url-div">1. Authorize this app by visiting this url: <a id="authorization-url-anchor" href="">AuthURL</a></div>
                                     <label for="auth-gdrive-file-dialog-code" class="control-label">2. Enter the code from that page here: </label>
                                     <input type="text" class="form-control" id="auth-gdrive-file-dialog-code" placeholder="Enter code here ...">
-                                    <div id="auth-error-message"></div>
+                                    <div class="error-message"></div>
                                 </div>
                             </form>
                         </div>

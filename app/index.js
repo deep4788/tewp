@@ -34,9 +34,7 @@ function appDataAndSettingsSetup() {
             filename: "[ No File ]",
             filelocation: ""
         };
-        console.log("check1");
         jsonfile.writeFileSync(settingsFile, settingsJson);
-        console.log("check2");
     }
 
     //Save the client't secret file (with Google Drive credentials) to application data directory

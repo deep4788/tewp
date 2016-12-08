@@ -76,7 +76,6 @@ Future Improvements / New Features
 #### New Features
 - Delete file from Google Drive
 - A dialog to confirm (cancel or save) unsaved changes for new content on the editor
-- Pressing Enter key should directly click on the Save or Open button in the modal dialog
 
 #### Future Improvements
 - Blank/new-line issue: whenever there are new lines added in a document or new lines added in an existing document and save button is clicked, the Google Drive API inserts more new lines when the file data is fetched from the drive and showed on the editor

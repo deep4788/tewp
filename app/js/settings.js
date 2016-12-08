@@ -1,3 +1,4 @@
+const {dialog} = require("electron").remote;
 const jsonfile = require("jsonfile");
 
 /*********************/
@@ -31,7 +32,7 @@ function getSettings() {
 function getSetting(settingKey) {
     var appSettings = getSettings();
     if(appSettings[settingKey] === undefined) {
-        dialog.showErrorBox("Error while trying to fetch a setting: ", err.message);
+        dialog.showErrorBox("Error", "Couldn't fetch a setting");
         return console.error("Error while trying to fetch a setting");
     }
     return appSettings[settingKey];
