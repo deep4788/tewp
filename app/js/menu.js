@@ -43,7 +43,7 @@ exports.menu = function() {
           label: "Toggle Developer Tools",
           accelerator: "Alt+Command+I",
           click: function(item, win) {
-            if (win) win.toggleDevTools();
+            if(win) win.toggleDevTools();
           }
         },
       ]

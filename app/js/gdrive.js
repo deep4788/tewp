@@ -161,7 +161,8 @@ function createGdriveFile(auth, fileDataObj) {
         }
         else {
             //Show dialog message for confirmation
-            dialog.showMessageBox({ type: "info", message: "The file has been created! :)", buttons: ["OK"] });
+            $(".confirmation-message").text("The file has been created! :)");
+            $("#confirmation-dialog").modal(modalOptions);
 
             //Update the settings
             appsettings.setSetting("filename", fileDataObj.filename);
@@ -198,7 +199,8 @@ function updateGdriveFile(auth, fileDataObj) {
         }
         else {
             //Show dialog message for confirmation
-            dialog.showMessageBox({ type: "info", message: "The file has been updated! :)", buttons: ["OK"] });
+            $(".confirmation-message").text("The file has been updated! :)");
+            $("#confirmation-dialog").modal(modalOptions);
 
             console.log("File Id:" , file.id);
         }
@@ -241,7 +243,8 @@ function storeToken() {
             }
         }
         fs.writeFile(TOKEN_PATH, JSON.stringify(token));
-        dialog.showMessageBox({ type: "info", message: "Authorization token stored to " + TOKEN_PATH + ". You can now use Google Drive services", buttons: ["OK"] });
+        $(".confirmation-message").text("Authorization token stored to " + TOKEN_PATH + ". You can now use Google Drive services");
+        $("#confirmation-dialog").modal(modalOptions);
     });
 }
 

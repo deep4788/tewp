@@ -86,16 +86,25 @@ function main() {
     });
 
     //Focus on the input text fields when the modals are shown
-    $("#save-file-dialog").on("shown.bs.modal", function () {
+    $("#save-file-dialog").on("shown.bs.modal", function() {
         $("#save-file-dialog-filename").focus();
     });
-    $("#auth-gdrive-file-dialog").on("shown.bs.modal", function () {
+    $("#auth-gdrive-file-dialog").on("shown.bs.modal", function() {
         $("#auth-gdrive-file-dialog-code").focus();
     });
 
     //Put focus back on the editor when the modal has finished being hidden
-    $("#open-file-dialog, #save-file-dialog, #auth-gdrive-file-dialog").on('hidden.bs.modal', function (e) {
+    $("#open-file-dialog, #save-file-dialog, #auth-gdrive-file-dialog, #confirmation-dialog").on("hidden.bs.modal", function(e) {
         editor.focus();
+    });
+
+    //Setup closing timer on confirmation dialog to 1 second
+    $("#confirmation-dialog").on("show.bs.modal", function() {
+        var confirmModal = $(this);
+        clearTimeout(confirmModal.data("hideInterval"));
+        confirmModal.data("hideInterval", setTimeout(function() {
+            confirmModal.modal("hide");
+        }, 1000));
     });
 
     //Put focus on the editor
