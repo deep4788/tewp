@@ -85,6 +85,19 @@ function main() {
         }
     });
 
+    //Focus on the input text fields when the modals are shown
+    $("#save-file-dialog").on("shown.bs.modal", function () {
+        $("#save-file-dialog-filename").focus();
+    });
+    $("#auth-gdrive-file-dialog").on("shown.bs.modal", function () {
+        $("#auth-gdrive-file-dialog-code").focus();
+    });
+
+    //Put focus back on the editor when the modal has finished being hidden
+    $("#open-file-dialog, #save-file-dialog, #auth-gdrive-file-dialog").on('hidden.bs.modal', function (e) {
+        editor.focus();
+    });
+
     //Put focus on the editor
     editor.focus();
 }
