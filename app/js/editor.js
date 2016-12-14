@@ -104,7 +104,7 @@ function main() {
         clearTimeout(confirmModal.data("hideInterval"));
         confirmModal.data("hideInterval", setTimeout(function() {
             confirmModal.modal("hide");
-        }, 1000));
+        }, 2000));
     });
 
     //Put focus on the editor
